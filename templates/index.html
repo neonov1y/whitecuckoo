@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title></title>
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+	</head>
+
+	<body>
+		<!--Header-->
+		<header>
+			<div id="cont_bitdam">
+				<h3 id="bitdam">Dashboard</h3>
+			</div>
+
+			<ul>
+				<li><a id="menulink" href="">Index</a></li>
+				<li><a id="menulink" href="">Statistic</a></li>
+				<li><a id="menulink" href="">Scanning</a></li>
+			</ul>
+		</header>
+
+        <!--<nav style="background-image: url('{{ url_for('static', filename='images/archive.jpeg') }}');">-->
+        <nav>
+            <p id="navtext">
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra hendrerit sapien,
+                malesuada euismod quam suscipit at. "
+            </p><br /><br />
+
+            <a id="cuckoolink" href="">Cuckoo Sandbox</a>
+        </nav>
+
+		<!--Section-->
+		<section>
+			<h2>Index</h2>
+
+			<article>
+				<h3>Sub Title</h3>
+
+				<p>
+					Supported neglected met she therefore unwilling discovery remainder. Way sentiments two
+                    indulgence uncommonly own. Diminution to frequently sentiments he connection continuing
+                    indulgence. An my exquisite conveying up defective. Shameless see the tolerably how
+                    continued. She enable men twenty elinor points appear. Whose merry ten yet was men seven
+                    ought balls.
+				</p>
+			</article>
+
+			<article>
+				<h3>Scan file</h3>
+
+                <div align="center">
+                	<p id="center">Choise file to scan: </p>
+
+                	<label class="uploadContainer">
+                		Upload & Scan
+                		<input type="file" id="uploadFile" onchange="upload()" formenctype="multipart/form-data" />
+                	</label>
+
+					<div id="loaderSpinner" align="center"></div>
+					<!-- <p id="loaderText">loading</p> -->
+
+					<div id="uploadBlock" align="left"></div>
+                </div>
+			</article>
+
+			<article>
+				<h3>Statistic</h3>
+
+				<p>
+					{% if cuckoo_status == "Stopped" %}
+						Cuckoo status: <font color="red">{{ cuckoo_status }}</font><br />
+					{% else %}
+						Cuckoo status: <font color="green">{{ cuckoo_status }}</font><br />
+					{% endif %}
+
+					White-list files: {{ files_number }} <br />
+					Scanned files: <br />
+					Total database size: _ mb <br />
+					Average scanning time: <br />
+				</p>
+
+			<canvas id="canvasChart"></canvas>
+
+			</article>
+		</section>
+
+		<!--Footer-->
+		<footer>
+			<p>footer</p>
+		</footer>
+
+		<script type="text/javascript">
+			var data_connections_number = {{ data_connections_number }};
+			var file_actions_number = {{ file_actions_number }};
+			var connections_number = {{ connections_number }};
+			var process_number = {{ process_number }};
+			var registry_actions_number = {{ registry_actions_number }};
+		</script>
+		<script type="text/javascript" src="{{ url_for('static', filename='chartMin.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='scriptChart.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='scriptAjax.js') }}"></script>
+	</body>
+</html>

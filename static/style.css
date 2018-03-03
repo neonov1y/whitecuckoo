@@ -1,0 +1,268 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+@-webkit-keyframes blink {
+	100% { color: rgba(34, 34, 34, 0); }
+}
+
+@keyframes blink {
+	100% { color: rgba(34, 34, 34, 0); }
+}
+
+@-webkit-keyframes spinner {
+	0% { -webkit-transform: rotate(0deg); }
+	100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spinner {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+body {
+	margin: 0px;
+}
+
+p {
+	color: black;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 17px;
+	text-align: justify;
+}
+
+::-moz-selection {
+	background-color: #C0C096;
+}
+
+::selection {
+	background-color: #C0C096;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Open Sans', sans-serif;
+	display: inline;
+}
+
+h2 {
+	color: #E0E0E0;
+	background-color: #222222;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+h3 {
+	color: black;
+	border-bottom: 3px;
+	border-bottom-color: black;
+	border-bottom-style: solid;
+}
+
+header {
+	width: 100%;
+	background-color: black;
+	padding: 15px;
+	opacity: 0.85;
+	text-align: left;
+	vertical-align: center;
+	position: fixed;
+}
+
+ul {
+	list-style-type: none;
+	display: inline;
+}
+
+li {
+	display: inline;
+}
+
+#menulink {
+	color: white;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 17px;
+	text-transform: uppercase;
+	text-decoration: none;
+	display: inline;
+	padding: 7px;
+	transition: 0.5s;
+}
+
+#menulink:hover {
+	background-color: #E6EFC2;
+	color: black;
+}
+
+#cont_bitdam {
+	display: inline;
+}
+
+#bitdam {
+	color: #E6EFC2;
+	background-color: black;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+	display: inline;
+}
+
+nav {
+    background-color: #E6EFC2;
+    min-height: 80px;
+    padding-top: 80px;
+    padding-bottom: 30px;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+#navtext {
+    background-color: black;
+    color: #E6EFC2;
+    font-size: 23px;
+    display: inline;
+}
+
+#cuckoolink {
+    color: black;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 14px;
+	text-decoration: none;
+    padding: 7px;
+    padding-left: 16px;
+    padding-right: 16px;
+    border: 1px;
+    border-color: black;
+    border-style: solid;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+	transition: 0.2s;
+}
+
+#cuckoolink:hover {
+	color: #666655;
+    border-color: #666655;
+    margin-left: 5px;
+    padding-left: 11px;
+    padding-right: 11px;
+}
+
+section {
+	min-height: 500px;
+	padding: 25px;
+	margin-bottom: 20px;
+	margin-left: 40px;
+	margin-right: 40px;
+}
+
+article {
+	background-color: #F2F2F2;
+	padding: 20px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#center {
+	text-align: center;
+}
+
+.uploadContainer {
+	background-color: #333333;
+    color: white;
+    padding: 5px;
+    padding-left: 25px;
+    padding-right: 25px;
+	margin-bottom: 15px;
+	text-align: center;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+	text-transform: uppercase;
+	text-decoration: none;
+	transition: 0.2s;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.uploadContainer:hover {
+	color: #C0C0C0;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.uploadContainer [type=file] {
+	display: none;
+}
+
+#loaderSpinner {
+	border: 5px;
+	border-style: solid;
+	border-color: #CCCCCC;
+	border-radius: 50%;
+	border-top-color: #444444;
+	width: 50px;
+	height: 50px;
+	-webkit-animation: spinner 1.5s linear infinite;
+	animation: spinner 1.5s linear infinite;
+	margin-bottom: 15px;
+	display: none;
+}
+
+#loaderText {
+	color: black;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;
+	-webkit-animation: blink 1s ease-in-out alternate-reverse infinite;
+	animation: blink 1s ease-in-out alternate-reverse infinite;
+	text-align: center;
+	text-transform: uppercase;
+	display: none;
+}
+
+#messageContainer {
+	display: block;
+	margin-top: 5px;
+	padding: 4px;
+    padding-left: 15px;
+    padding-right: 15px;
+	border: 1px;
+	border-style: solid;
+	border-color: #444444;
+}
+
+#messageContainer:hover {
+	background-color: #E7E6E1;
+}
+
+#typeContainer {
+	width: 20%;
+	max-width: 120px;
+	display: inline-block;
+	vertical-align: top;
+}
+
+#dataContainer {
+	width: 75%;
+	display: inline-block;
+	vertical-align: top;
+}
+
+#messageType {
+	color: #393232;
+	display: inline;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;
+	margin-right: 10px;
+	word-wrap: break-word;
+}
+
+#messageData {
+	color: #444444;
+	display: inline;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;
+	word-wrap: break-word;
+}
+
+footer {
+	height: 50px;
+	background-color: black;
+	padding: 10px;
+}
