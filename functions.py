@@ -922,7 +922,7 @@ def clear_db():
 # Function to count database size
 
 def size_db():
-    # Function delete all data from database
+    # Function return number of elements in database sorted by type of data
     # data[0] - number of connection data
     # data[1] - number of files in database
     # data[2] - number of files actions in database
@@ -958,7 +958,7 @@ def size_db():
     return data
 
 
-# Function to check if cuckoo run
+# Function to check cuckoo status
 
 def cuckoo_status():
     result = subprocess.call(["pgrep", "cuckoo"])
