@@ -7,8 +7,8 @@ function upload() {
 		if (this.readyState == 4 && this.status == 200) {
 			var str_data = "";
 			var str_type = "";
-			object = JSON.parse(xhttp.responseText)
-			document.getElementById("uploadBlock").innerHTML = ""
+			object = JSON.parse(xhttp.responseText);
+			document.getElementById("uploadBlock").innerHTML = "";
 
 			for (var i = 0;i < object.length;i++) {
 				if (object[i].data_type == "DNS connection") {
@@ -32,36 +32,36 @@ function upload() {
 					str_type = "Process: ";
 				}
 				else if (object[i].data_type == "Dropped file") {
-					str_data = "size: " + object[i].size + "<br /> process: " + object[i].process
+					str_data = "size: " + object[i].size + "<br /> process: " + object[i].process;
 					str_data += "<br /> type: " + object[i].type + "<br /> path: " + object[i].path;
 					str_type = "Dropped file: ";
 				}
 				else if (object[i].data_type == "Deleted file") {
-					str_data = "action_type: " + object[i].action_type + "<br /> full_path: " + object[i].full_path
+					str_data = "action_type: " + object[i].action_type + "<br /> full_path: " + object[i].full_path;
 					str_type = "Deleted file: ";
 				}
 				else if (object[i].data_type == "Created folder") {
-					str_data = "action_type: " + object[i].action_type + "<br /> full_path: " + object[i].full_path
+					str_data = "action_type: " + object[i].action_type + "<br /> full_path: " + object[i].full_path;
 					str_type = "Created folder: ";
 				}
 				else if (object[i].data_type == "Deleted folder") {
-					str_data = "action_type: " + object[i].action_type + "<br /> full_path: " + object[i].full_path
+					str_data = "action_type: " + object[i].action_type + "<br /> full_path: " + object[i].full_path;
 					str_type = "Deleted folder: ";
 				}
 				else if (object[i].data_type == "Written registry") {
-					str_data = "action_type: " + object[i].action_type + "<br /> full_path: " + object[i].full_path
+					str_data = "action_type: " + object[i].action_type + "<br /> full_path: " + object[i].full_path;
 					str_type = "Written registry: ";
 				}
 				else if (object[i].data_type == "Opened registry") {
-					str_data = "action_type: " + object[i].action_type + "<br /> full_path: " + object[i].full_path
+					str_data = "action_type: " + object[i].action_type + "<br /> full_path: " + object[i].full_path;
 					str_type = "Opened registry: ";
 				}
 				else if (object[i].data_type == "Deleted registry") {
-					str_data = "action_type: " + object[i].action_type + "<br /> full_path: " + object[i].full_path
+					str_data = "action_type: " + object[i].action_type + "<br /> full_path: " + object[i].full_path;
 					str_type = "Deleted registry: ";
 				}
 				else if (object[i].data_type == "Readed registry") {
-					str_data = "action_type: " + object[i].action_type + "<br /> full_path: " + object[i].full_path
+					str_data = "action_type: " + object[i].action_type + "<br /> full_path: " + object[i].full_path;
 					str_type = "Readed registry: ";
 				}
 
@@ -73,25 +73,20 @@ function upload() {
 						<div id='dataContainer'>\
 							<p id='messageData'>" + str_data + "</p>\
 						</div>\
-					</div>"
-
+					</div>";
 			}
-			// 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
 			// Loading off
 			document.getElementById("loaderSpinner").style.display = "none";
 			document.getElementById("loaderText").style.display = "none";
 		}
 	}
 
-	form.append("fil", file);
-	xhttp.open("POST", "http://127.0.0.1:5000/upload", true)
+	form.append("file", file);
+	xhttp.open("POST", document.location.href + "upload", true);
 	xhttp.send(form);
 
 	// Loading on
 	document.getElementById("loaderSpinner").style.display = "block";
 	document.getElementById("loaderText").style.display = "block";
-
-	//alert("Size: " + file.files[0].size + "bytes");
-	//alert("File name: " + file.files[0].name);
-	//alert("File path: " + file.files[0].contents);
 };

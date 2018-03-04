@@ -22,12 +22,12 @@ def json_open(file_path, file_name):
         jfile = open(file_path + file_name)
         jdata = json.load(jfile)
 
-        print("%-30s" % print_string + "%s" % "File " + file_name + ".json opened.")
+        print("%-30s" % print_string + "%s" % "File " + file_name + " opened.")
 
         return jdata
 
     except IOError:
-        error_exit(print_string + "Open of file" + file_name + ".json false.")
+        error_exit(print_string + "Open of file" + file_name + " false.")
 
 
 # Function to close JSON file

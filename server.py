@@ -27,11 +27,11 @@ def index():
                            registry_actions_number=data[5], cuckoo_status=cuckoo_status)
 
 
-@app.route('/upload', methods=['GET', 'POST'])
+@app.route('/upload', methods=['POST'])
 def upload():
     # Save the uploaded file in the directory to uploads
 
-    f = request.files['fil']
+    f = request.files['file']
     f.save('uploads/' + secure_filename(f.filename))
 
     # Open MySQL connection
@@ -54,4 +54,4 @@ def upload():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
