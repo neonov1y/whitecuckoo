@@ -53,5 +53,11 @@ def upload():
     return json.dumps(data)
 
 
+@app.route('/file_upload', methods=['POST'])
+def upload_file():
+    # cuckoo submit --machine Cuckoo --timeout 60 --package pdf "Cuckoo.pdf"
+    return True
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

@@ -1,4 +1,26 @@
-function upload() {
+function menu(link) {
+	switch (link) {
+		case 1:
+			document.getElementById("art1").style.display = "block";
+			document.getElementById("art2").style.display = "none";
+			document.getElementById("art3").style.display = "none";
+			break;
+		case 2:
+			document.getElementById("art1").style.display = "none";
+			document.getElementById("art2").style.display = "block";
+			document.getElementById("art3").style.display = "none";
+			break;
+		case 3:
+			document.getElementById("art1").style.display = "none";
+			document.getElementById("art2").style.display = "none";
+			document.getElementById("art3").style.display = "block";
+			break;
+		default:
+			break;
+	}
+}
+
+function upload_report() {
 	var file = document.getElementById("uploadFile").files[0];
 	var xhttp = new XMLHttpRequest();
 	var form = new FormData();
@@ -65,16 +87,12 @@ function upload() {
 					str_type = "Readed registry: ";
 				}
 
-				document.getElementById("uploadBlock").innerHTML += "\
-					<div id='messageContainer'>\
-						<div id='typeContainer'>\
-							<p id='messageType'>" + str_type + "</p>\
-						</div>\
-						<div id='dataContainer'>\
-							<p id='messageData'>" + str_data + "</p>\
-						</div>\
-					</div>";
+				if (i == 0) add_message_block("Result: ", "New data detected.");
+
+				add_message_block(str_type, str_data);
 			}
+
+			if (i == 0) add_message_block("Result: ", "New data not detected.");
 
 			// Loading off
 			document.getElementById("loaderSpinner").style.display = "none";
@@ -89,4 +107,20 @@ function upload() {
 	// Loading on
 	document.getElementById("loaderSpinner").style.display = "block";
 	document.getElementById("loaderText").style.display = "block";
-};
+}
+
+function upload_file() {
+
+}
+
+function add_message_block(str_type, str_data) {
+	document.getElementById("uploadBlock").innerHTML += "\
+		<div id='messageContainer'>\
+			<div id='typeContainer'>\
+				<p id='messageType'>" + str_type + "</p>\
+			</div>\
+			<div id='dataContainer'>\
+				<p id='messageData'>" + str_data + "</p>\
+			</div>\
+		</div>";
+}

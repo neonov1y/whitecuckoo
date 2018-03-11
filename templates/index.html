@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title></title>
+		<title>Dashboard</title>
 		<meta charset="UTF-8" />
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
 	</head>
@@ -9,33 +9,30 @@
 	<body>
 		<!--Header-->
 		<header>
-			<div id="cont_bitdam">
-				<h3 id="bitdam">Dashboard</h3>
+			<div id="dashboartContainer">
+				<h3 id="dashboard">Dashboard</h3>
 			</div>
 
 			<ul>
-				<li><a id="menulink" href="">Index</a></li>
-				<li><a id="menulink" href="">Statistic</a></li>
-				<li><a id="menulink" href="">Scanning</a></li>
+				<li><a class="menuLink" onclick="menu(1);">Instruction</a></li>
+				<li><a class="menuLink" onclick="menu(2);">Scan</a></li>
+				<li><a class="menuLink" onclick="menu(3);">Statistic</a></li>
 			</ul>
 		</header>
 
-        <!--<nav style="background-image: url('{{ url_for('static', filename='images/archive.jpeg') }}');">-->
         <nav>
-            <p id="navtext">
+            <p id="navText">
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra hendrerit sapien,
                 malesuada euismod quam suscipit at. "
             </p><br /><br />
 
-            <a id="cuckoolink" href="">Cuckoo Sandbox</a>
+            <a id="cuckooLink" href="">Cuckoo Sandbox</a>
         </nav>
 
 		<!--Section-->
 		<section>
-			<h2>Index</h2>
-
-			<article>
-				<h3>Sub Title</h3>
+			<article id="art1">
+				<h3>Instruction</h3>
 
 				<p>
 					Supported neglected met she therefore unwilling discovery remainder. Way sentiments two
@@ -46,15 +43,15 @@
 				</p>
 			</article>
 
-			<article>
-				<h3>Scan file</h3>
+			<article id="art2">
+				<h3>Reports scan</h3>
 
                 <div align="center">
-                	<p id="center">Choise file to scan: </p>
+                	<p id="center">Choise json report file to scan: </p>
 
                 	<label class="uploadContainer">
                 		Upload & Scan
-                		<input type="file" id="uploadFile" onchange="upload()" formenctype="multipart/form-data" />
+                		<input type="file" id="uploadFile" onchange="upload_report()" formenctype="multipart/form-data" />
                 	</label>
 
 					<div id="loaderSpinner" align="center"></div>
@@ -64,7 +61,26 @@
                 </div>
 			</article>
 
+			<!--
 			<article>
+				<h3>Scan files</h3>
+
+                <div align="center">
+                	<p id="center">Choise pdf or doc file to scan: </p>
+
+                	<label class="uploadContainer">
+                		Upload & Scan
+                		<input type="file" id="uploadFile" onchange="upload_file()" formenctype="multipart/form-data" />
+                	</label>
+
+					<div id="loaderSpinner" align="center"></div>
+
+					<div id="uploadBlock" align="left"></div>
+                </div>
+			</article>
+			-->
+
+			<article id="art3">
 				<h3>Statistic</h3>
 
 				<p>
@@ -87,7 +103,7 @@
 
 		<!--Footer-->
 		<footer>
-			<p>footer</p>
+			<p id="footerText">Footer</p>
 		</footer>
 
 		<script type="text/javascript">
