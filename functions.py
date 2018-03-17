@@ -749,7 +749,7 @@ def check_report(file_path, file_name):
 
     # Dropped files
 
-    if "dropped" in check_jdata:
+    if "dropped" in jdata:
         for file_temp in jdata["dropped"]:
             if len(file_temp["pids"]) is not 0:
                 for process in jdata["behavior"]["generic"]:
@@ -790,6 +790,27 @@ def check_report(file_path, file_name):
             file_info = {
                 "data_type":    "Deleted file",
                 "action_type":  "file_deleted",
+                "full_path":    str(file_temp.replace("\\", "/"))
+            }
+
+            data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
+
+            if data_id is False:
+                data.append(file_info)
+
+    # Created files
+    # Detect all files except .tmp and .TMP
+
+    if "file_created" in check_jdata:
+        for file_temp in jdata["behavior"]["summary"]["file_created"]:
+            if file_temp.find(".tmp") is not -1:
+                continue
+            elif file_temp.find(".TMP") is not -1:
+                continue
+
+            file_info = {
+                "data_type":    "Created file",
+                "action_type":  "file_created",
                 "full_path":    str(file_temp.replace("\\", "/"))
             }
 

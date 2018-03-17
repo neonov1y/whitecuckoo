@@ -30,7 +30,6 @@ function upload_report() {
 			var str_data = "";
 			var str_type = "";
 			object = JSON.parse(xhttp.responseText);
-			document.getElementById("uploadBlock").innerHTML = "";
 
 			for (var i = 0;i < object.length;i++) {
 				if (object[i].data_type == "DNS connection") {
@@ -61,6 +60,10 @@ function upload_report() {
 				else if (object[i].data_type == "Deleted file") {
 					str_data = "action_type: " + object[i].action_type + "<br /> full_path: " + object[i].full_path;
 					str_type = "Deleted file: ";
+				}
+				else if (object[i].data_type == "Created file") {
+					str_data = "action_type: " + object[i].action_type + "<br /> full_path: " + object[i].full_path;
+					str_type = "Created file: ";
 				}
 				else if (object[i].data_type == "Created folder") {
 					str_data = "action_type: " + object[i].action_type + "<br /> full_path: " + object[i].full_path;
@@ -95,6 +98,7 @@ function upload_report() {
 			if (i == 0) add_message_block("Result: ", "New data not detected.");
 
 			// Loading off
+			document.getElementById("uploadProperties").style.display = "inline-block";
 			document.getElementById("loaderSpinner").style.display = "none";
 			document.getElementById("loaderText").style.display = "none";
 		}
@@ -105,8 +109,14 @@ function upload_report() {
 	xhttp.send(form);
 
 	// Loading on
+	document.getElementById("uploadBlock").innerHTML = "";
+	document.getElementById("uploadProperties").style.display = "none";
 	document.getElementById("loaderSpinner").style.display = "block";
 	document.getElementById("loaderText").style.display = "block";
+
+	// Properties
+	document.getElementById("scanTime").value = "";
+	document.getElementById("memoryDump").checked = false;
 }
 
 function upload_file() {
