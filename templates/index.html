@@ -22,12 +22,18 @@
 
         <nav>
             <p id="navText">
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra hendrerit sapien,
-                malesuada euismod quam suscipit at. "
+                "We are use Cuckoo Sandbox 2.0.4 to scan files. More information you can find in instruction."
             </p><br /><br />
 
-            <a id="cuckooLink" href="">Cuckoo Sandbox</a>
+            <a class="instLink" id="instLinkShow" onclick="instruction('show');">Show Instruction</a>
+			<a class="instLink" id="instLinkHide" onclick="instruction('hide');">Hide Instruction</a>
         </nav>
+
+		<div id="instruction">
+            <p id="instText">
+                Instruction.
+            </p>
+        </div>
 
 		<!--Section-->
 		<section>
@@ -51,7 +57,7 @@
                 		<p id="center">Choise json report file to scan: </p>
 
 						<div class="propertiesContainer">
-							<input type="checkbox" class="switch" id="memoryDump" defaultchecked="False" />
+							<input type="checkbox" class="switch" id="memoryDump" />
 							<p class="propertiesText">Memory Dump</p>
 						</div>
 
@@ -126,6 +132,8 @@
 			var connections_number = {{ connections_number }};
 			var process_number = {{ process_number }};
 			var registry_actions_number = {{ registry_actions_number }};
+			var dll_number = {{ dll_number }};
+			var command_line_number = {{ command_line_number }};
 		</script>
 		<script type="text/javascript" src="{{ url_for('static', filename='chartMin.js') }}"></script>
 		<script type="text/javascript" src="{{ url_for('static', filename='scriptChart.js') }}"></script>

@@ -19,6 +19,7 @@
 	100% { transform: rotate(360deg); }
 }
 
+
 /*
 @keyframes show {
     0% {
@@ -35,14 +36,49 @@
 */
 
 @keyframes show {
-    0% {
-        display: none;
+    from {
         opacity: 0;
     }
-    100% {
-        display: block;
+    to {
         opacity: 1;
     }
+}
+
+@keyframes showInst {
+    from {
+    	height: 0px;
+        /* opacity: 0; */
+    }
+    to {
+    	height: 50px;
+        /* opacity: 1; */
+    }
+}
+
+@keyframes hideInst {
+    from {
+    	height: 50px;
+        /* opacity: 1; */
+    }
+    to {
+    	height: 0px;
+        /* opacity: 0; */
+    }
+}
+
+@-moz-keyframes slide {
+	from {height: 0;}
+	to {height: 300px;}
+}
+
+@-webkit-keyframes slide {
+	from {height: 0;}
+	to {height: 300px;}
+}
+
+@keyframes slide {
+	from {height: 0;}
+	to {height: 300px;}
 }
 
 /* Main */
@@ -91,10 +127,10 @@ header {
 	width: 100%;
 	background-color: black;
 	padding: 15px;
-	opacity: 1;
 	text-align: left;
 	vertical-align: center;
-	position: fixed;
+  	position: fixed;
+  	z-index: 1000;
 }
 
 ul {
@@ -150,7 +186,7 @@ nav {
     display: inline;
 }
 
-#cuckooLink {
+.instLink {
     color: black;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 14px;
@@ -168,13 +204,42 @@ nav {
 	transition: 0.2s;
 }
 
-#cuckooLink:hover {
+.instLink:hover {
 	color: #666655;
     border-color: #666655;
     margin-left: 5px;
     padding-left: 11px;
     padding-right: 11px;
 }
+
+#instLinkHide {
+	height: 0px;
+	display: none;
+}
+
+#instruction {
+    background-color: #C5BF9B;
+    padding-top: 0px;
+	display: none;
+/*
+   -moz-animation: slide 1s forwards;
+   -webkit-animation: slide 1s forwards;
+   -o-animation: slide 1s forwards;
+   -ms-animation: slide 1s forwards;
+    animation: slide 1s forwards;
+    */
+}
+
+#instText {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 120px;
+    padding-right: 120px;
+    margin: 0px;
+    animation: show 0.5s ease-in-out;
+}
+
+
 
 /* Section */
 
@@ -254,7 +319,7 @@ article {
 	display: none;
 }
 
-#messageContainer {
+.messageContainer {
 	display: block;
 	margin-top: 5px;
 	padding: 4px;
@@ -265,33 +330,34 @@ article {
 	border-color: #444444;
 }
 
-#messageContainer:hover {
+.messageContainer:hover {
 	background-color: #E7E6E1;
 }
 
-#typeContainer {
+.typeContainer {
 	width: 20%;
 	max-width: 120px;
 	display: inline-block;
 	vertical-align: top;
 }
 
-#dataContainer {
+.dataContainer {
 	width: 75%;
 	display: inline-block;
 	vertical-align: top;
 }
 
-#messageType {
+.messageType {
 	color: #393232;
 	display: inline;
-	font-family: 'Hind', sans-serif;
-	font-size: 14px;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 13px;
+	font-weight: bold;
 	margin-right: 10px;
 	word-wrap: break-word;
 }
 
-#messageData {
+.messageData {
 	color: #444444;
 	display: inline;
 	font-family: 'Open Sans', sans-serif;
