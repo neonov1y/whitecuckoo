@@ -83,10 +83,10 @@ function upload_report() {
 						str_data = "name: " + object[i].process_name;
 						break;
 					case "DLL loaded":
-						str_data = "full_path: " + object[i].full_path;
+						str_data = "name: " + object[i].full_path;
 						break;
 					case "Command line":
-						str_data = "full_path: " + object[i].command;
+						str_data = "command: " + object[i].command;
 						break;
 					case "Dropped file":
 						str_data = "size: " + object[i].size + "<br /> process: " + object[i].process;

@@ -11,6 +11,7 @@ virus_flag = False
 # Open MySQL connection
 
 cursor = functions.mysql_create_connection()
+
 # functions.clear_db()
 
 # functions.cuckoo_status()
@@ -25,7 +26,7 @@ cursor = functions.mysql_create_connection()
 #    functions.add_report("reports/", "report" + str(i) + ".json")
 # data = functions.check_report("reports/", "report20.json")
 
-functions.disk_space()
+# functions.disk_space()
 
 # Close MySQL connection
 

@@ -95,7 +95,7 @@ def upload_file():
 
     # Cuckoo running
 
-    result = subprocess.check_output(["cuckoo", "submit", "--machine", "Cuckoo", "--timeout", "10", "--package",
+    result = subprocess.check_output(["cuckoo", "submit", "--machine", "Cuckoo", "--timeout", "12", "--package",
                                       "vbs", vbs_file_name])
     result_pointer = result.find("ID #")
     report_id = result[result_pointer+4:len(result)-1]
@@ -115,13 +115,14 @@ def upload_file():
                     break
         time.sleep(1)
 
+    time.sleep(5)
+
     # Open MySQL connection
 
     functions.mysql_create_connection()
 
     # Check the uploaded report
 
-    time.sleep(2)
     file_path = "/home/alex/.cuckoo/storage/analyses/" + str(report_id) + "/reports/"
     data = functions.check_report(file_path, "report.json")
 
@@ -129,10 +130,16 @@ def upload_file():
 
     functions.mysql_close_connection()
 
-    # Delete uploaded file from host
+    # Delete uploaded file from host and memory dump if exist
 
     # subprocess.call(["rm", vbs_file_name])
     subprocess.call(["rm", "uploads/" + uploaded_file_name])
+
+    result = subprocess.check_output(["ls", "/home/alex/.cuckoo/storage/analyses/" + str(report_id) + "/memory.dmp"])
+    result_flag = result.find(str("memory.dmp"))
+    if result_flag is not -1:
+        subprocess.call(["rm", "/home/alex/.cuckoo/storage/analyses/" + str(report_id) + "/memory.dmp"])
+        print("Dump file deleted.")
 
     # Stop time
 

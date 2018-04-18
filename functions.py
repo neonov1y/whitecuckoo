@@ -351,142 +351,176 @@ def add_report(file_path, file_name):
 
     # Creating of virustotal check variable
 
-    check_jdata = jdata["virustotal"]
+    check_jdata = ""
+    if "virustotal" in jdata:
+        check_jdata = jdata["virustotal"]
 
     # Virustotal check
 
     if "scans" in check_jdata:
         for scan in jdata["virustotal"]["scans"]:
-            if virus_flag is False and jdata["virustotal"]["scans"][scan]["detected"] is True:
-                virus_flag = True
+            if "detected" in scan:
+                if virus_flag is False and jdata["virustotal"]["scans"][scan]["detected"] is True:
+                    virus_flag = True
 
     # Insert file information
 
-    file_info = {
-        "name": str(jdata["target"]["file"]["name"]),
-        "type": str(jdata["info"]["package"]),
-        "size": str(jdata["target"]["file"]["size"]),
-        "md5":  str(jdata["target"]["file"]["md5"]),
-        "flag_virustotal": virus_flag * 1
-    }
+    if "target" in jdata and "info" in jdata:
+        if "package" in jdata["info"] and "file" in jdata["target"]:
+            if "name" in jdata["target"]["file"] and "size" in jdata["target"]["file"] and "md5" in\
+                    jdata["target"]["file"]:
+                file_info = {
+                    "name": str(jdata["target"]["file"]["name"]),
+                    "type": str(jdata["info"]["package"]),
+                    "size": str(jdata["target"]["file"]["size"]),
+                    "md5":  str(jdata["target"]["file"]["md5"]),
+                    "flag_virustotal": virus_flag * 1
+                }
 
-    file_id = insert_data("file", file_info["name"], file_info["type"],
-                          file_info["size"], file_info["md5"], file_info["flag_virustotal"])
+                file_id = insert_data("file", file_info["name"], file_info["type"],
+                                      file_info["size"], file_info["md5"], file_info["flag_virustotal"])
+            else:
+                json_close()
+                return
+        else:
+            json_close()
+            return
+    else:
+        json_close()
+        return
+
+    # Creating of network check variable
+
+    check_jdata = ""
+    if "network" in jdata:
+        check_jdata = jdata["network"]
 
     # Insert DNS connections
 
-    if "dns" in jdata["network"]:
+    if "dns" in check_jdata:
         for dns in jdata["network"]["dns"]:
-            dns_info = {
-                "type":     str(dns["type"]),
-                "request":  str(dns["request"])
-            }
+            if "type" in dns and "request" in dns:
+                dns_info = {
+                    "type":     str(dns["type"].encode("utf-8")),
+                    "request":  str(dns["request"].encode("utf-8"))
+                }
 
-            data_id = check_data("network_dns", dns_info["type"], dns_info["request"])
+                data_id = check_data("network_dns", dns_info["type"], dns_info["request"])
 
-            if data_id is False:
-                data_id = insert_data("network_dns", dns_info["type"], dns_info["request"])
+                if data_id is False:
+                    data_id = insert_data("network_dns", dns_info["type"], dns_info["request"])
 
-            insert_data("connection_type", "network_dns", file_id, data_id)
+                insert_data("connection_type", "network_dns", file_id, data_id)
 
     # Insert HTTP connections
 
-    if "http" in jdata["network"]:
+    if "http" in check_jdata:
         for http in jdata["network"]["http"]:
-            http_info = {
-                "url":      str(http["uri"]),
-                "host":     str(http["host"])
-            }
+            if "uri" in http and "host" in http:
+                http_info = {
+                    "url":      str(http["uri"].encode("utf-8")),
+                    "host":     str(http["host"].encode("utf-8"))
+                }
 
-            data_id = check_data("network_http", http_info["url"], http_info["host"])
+                data_id = check_data("network_http", http_info["url"], http_info["host"])
 
-            if data_id is False:
-                data_id = insert_data("network_http", http_info["url"], http_info["host"])
+                if data_id is False:
+                    data_id = insert_data("network_http", http_info["url"], http_info["host"])
 
-            insert_data("connection_type", "network_http", file_id, data_id)
+                insert_data("connection_type", "network_http", file_id, data_id)
 
     # Insert TCP connections
 
-    if "tcp" in jdata["network"]:
+    if "tcp" in check_jdata:
         for tcp in jdata["network"]["tcp"]:
-            tcp_info = {
-                "source":       str(tcp["src"]),
-                "destination":  str(tcp["dst"])
-            }
+            if "src" in tcp and "dst" in tcp:
+                tcp_info = {
+                    "source":       str(tcp["src"].encode("utf-8")),
+                    "destination":  str(tcp["dst"].encode("utf-8"))
+                }
 
-            data_id = check_data("network_tcp", tcp_info["source"], tcp_info["destination"])
+                data_id = check_data("network_tcp", tcp_info["source"], tcp_info["destination"])
 
-            if data_id is False:
-                data_id = insert_data("network_tcp", tcp_info["source"], tcp_info["destination"])
+                if data_id is False:
+                    data_id = insert_data("network_tcp", tcp_info["source"], tcp_info["destination"])
 
-            insert_data("connection_type", "network_tcp", file_id, data_id)
+                insert_data("connection_type", "network_tcp", file_id, data_id)
 
     # Insert UDP connections
 
-    if "udp" in jdata["network"]:
+    if "udp" in check_jdata:
         for udp in jdata["network"]["udp"]:
-            udp_info = {
-                "source":       str(udp["src"]),
-                "destination":  str(udp["dst"])
-            }
+            if "src" in udp and "dst" in udp:
+                udp_info = {
+                    "source":       str(udp["src"].encode("utf-8")),
+                    "destination":  str(udp["dst"].encode("utf-8"))
+                }
 
-            data_id = check_data("network_udp", udp_info["source"], udp_info["destination"])
+                data_id = check_data("network_udp", udp_info["source"], udp_info["destination"])
 
-            if data_id is False:
-                data_id = insert_data("network_udp", udp_info["source"], udp_info["destination"])
+                if data_id is False:
+                    data_id = insert_data("network_udp", udp_info["source"], udp_info["destination"])
 
-            insert_data("connection_type", "network_udp", file_id, data_id)
+                insert_data("connection_type", "network_udp", file_id, data_id)
 
     # Creating of memory check variable
 
-    check_jdata = jdata["memory"]
+    check_jdata = ""
+    if "memory" in jdata:
+        check_jdata = jdata["memory"]
 
     # Insert processes
 
     if "pslist" in check_jdata:
-        for process in jdata["memory"]["pslist"]["data"]:
-            process_info = {
-                "process_name": str(process["process_name"])
-            }
+        if "data" in check_jdata["pslist"]:
+            for process in jdata["memory"]["pslist"]["data"]:
+                if "process_name" in process:
+                    process_info = {
+                        "process_name": str(process["process_name"].encode("utf-8"))
+                    }
 
-            data_id = check_data("process", process_info["process_name"])
+                    data_id = check_data("process", process_info["process_name"])
 
-            if data_id is False:
-                data_id = insert_data("process", process_info["process_name"])
+                    if data_id is False:
+                        data_id = insert_data("process", process_info["process_name"])
 
-            insert_data("connection_type", "process", file_id, data_id)
+                    insert_data("connection_type", "process", file_id, data_id)
 
     # Insert dropped files
 
     if "dropped" in jdata:
         for file_temp in jdata["dropped"]:
-            if len(file_temp["pids"]) is not 0:
-                for process in jdata["behavior"]["generic"]:
-                    if process["pid"] == file_temp["pids"][0]:
-                        process_name = process["process_name"]
-                        break
-            else:
-                process_name = ""
+            process_name = ""
+            if "pids" in file_temp:
+                if len(file_temp["pids"]) is not 0:
+                    for process in jdata["behavior"]["generic"]:
+                        if process["pid"] == file_temp["pids"][0]:
+                            process_name = process["process_name"]
+                            break
 
-            file_info = {
-                "path":     str(file_temp["filepath"]),
-                "type":     str(file_temp["type"]),
-                "process":  process_name,
-                "size":     str(file_temp["size"]),
-            }
+            if "filepath" in file_temp and "type" in file_temp and "size" in file_temp:
+                file_info = {
+                    "path":     str(file_temp["filepath"].encode("utf-8")),
+                    "type":     str(file_temp["type"].encode("utf-8")),
+                    "process":  process_name,
+                    "size":     str(file_temp["size"]),
+                }
 
-            data_id = check_data("file_dropped", file_info["path"], file_info["type"],
-                                 file_info["process"], file_info["size"])
+                data_id = check_data("file_dropped", file_info["path"], file_info["type"],
+                                     file_info["process"], file_info["size"])
 
-            if data_id is False:
-                data_id = insert_data("file_dropped", file_info["path"], file_info["type"],
-                                      file_info["process"], file_info["size"])
+                if data_id is False:
+                    data_id = insert_data("file_dropped", file_info["path"], file_info["type"],
+                                          file_info["process"], file_info["size"])
 
-            insert_data("connection_type", "file_dropped", file_id, data_id)
+                insert_data("connection_type", "file_dropped", file_id, data_id)
 
     # Creating of behavior check variable
 
-    check_jdata = jdata["behavior"]["summary"]
+    check_jdata = ""
+    if "behavior" in jdata:
+        if "summary" in jdata["behavior"]:
+            check_jdata = jdata["behavior"]["summary"]
 
     # Insert loaded dlls
 
@@ -494,7 +528,7 @@ def add_report(file_path, file_name):
         for dll in jdata["behavior"]["summary"]["dll_loaded"]:
             dll_info = {
                 "data_type":    "DLL loaded",
-                "full_path":    str(dll.replace("\\", "/"))
+                "full_path":    str(dll.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("dll", dll_info["full_path"])
@@ -509,8 +543,8 @@ def add_report(file_path, file_name):
     if "command_line" in check_jdata:
         for command in jdata["behavior"]["summary"]["command_line"]:
             command_info = {
-                "data_type":        "Command line",
-                "command":     str(command.replace("\\", "/"))
+                "data_type":    "Command line",
+                "command":      str(command.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("command_line", command_info["command"])
@@ -526,7 +560,7 @@ def add_report(file_path, file_name):
         for file_temp in jdata["behavior"]["summary"]["file_opened"]:
             file_info = {
                 "action_type": "file_opened",
-                "full_path": str(file_temp.replace("\\", "/"))
+                "full_path": str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
@@ -542,7 +576,7 @@ def add_report(file_path, file_name):
         for file_temp in jdata["behavior"]["summary"]["file_created"]:
             file_info = {
                 "action_type": "file_created",
-                "full_path": str(file_temp.replace("\\", "/"))
+                "full_path": str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
@@ -558,7 +592,7 @@ def add_report(file_path, file_name):
         for file_temp in jdata["behavior"]["summary"]["file_copied"][0]:
             file_info = {
                 "action_type": "file_copied",
-                "full_path": str(file_temp.replace("\\", "/"))
+                "full_path": str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
@@ -574,7 +608,7 @@ def add_report(file_path, file_name):
         for file_temp in jdata["behavior"]["summary"]["file_written"]:
             file_info = {
                 "action_type": "file_written",
-                "full_path": str(file_temp.replace("\\", "/"))
+                "full_path": str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
@@ -596,7 +630,7 @@ def add_report(file_path, file_name):
 
             file_info = {
                 "action_type": "file_deleted",
-                "full_path": str(file_temp.replace("\\", "/"))
+                "full_path": str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
@@ -612,7 +646,7 @@ def add_report(file_path, file_name):
         for directory in jdata["behavior"]["summary"]["directory_created"]:
             directory_info = {
                 "action_type": "directory_created",
-                "full_path": str(directory.replace("\\", "/"))
+                "full_path": str(directory.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("folder_action", directory_info["action_type"], directory_info["full_path"])
@@ -628,7 +662,7 @@ def add_report(file_path, file_name):
         for directory in jdata["behavior"]["summary"]["directory_removed"]:
             directory_info = {
                 "action_type": "directory_removed",
-                "full_path": str(directory.replace("\\", "/"))
+                "full_path": str(directory.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("folder_action", directory_info["action_type"], directory_info["full_path"])
@@ -644,7 +678,7 @@ def add_report(file_path, file_name):
         for regkey in jdata["behavior"]["summary"]["regkey_written"]:
             regkey_info = {
                 "action_type": "regkey_written",
-                "full_path": str(regkey.replace("\\", "/"))
+                "full_path": str(regkey.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
@@ -660,7 +694,7 @@ def add_report(file_path, file_name):
         for regkey in jdata["behavior"]["summary"]["regkey_opened"]:
             regkey_info = {
                 "action_type": "regkey_opened",
-                "full_path": str(regkey.replace("\\", "/"))
+                "full_path": str(regkey.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
@@ -676,7 +710,7 @@ def add_report(file_path, file_name):
         for regkey in jdata["behavior"]["summary"]["regkey_deleted"]:
             regkey_info = {
                 "action_type": "regkey_deleted",
-                "full_path": str(regkey.replace("\\", "/"))
+                "full_path": str(regkey.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
@@ -692,7 +726,7 @@ def add_report(file_path, file_name):
         for regkey in jdata["behavior"]["summary"]["regkey_read"]:
             regkey_info = {
                 "action_type": "regkey_read",
-                "full_path": str(regkey.replace("\\", "/"))
+                "full_path": str(regkey.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
@@ -727,14 +761,17 @@ def check_report(file_path, file_name):
 
     # Creating of virustotal check variable
 
-    check_jdata = jdata["virustotal"]
+    check_jdata = ""
+    if "virustotal" in jdata:
+        check_jdata = jdata["virustotal"]
 
     # Virustotal check
 
     if "scans" in check_jdata:
         for scan in jdata["virustotal"]["scans"]:
-            if virus_flag is False and jdata["virustotal"]["scans"][scan]["detected"] is True:
-                virus_flag = True
+            if "detected" in scan:
+                if virus_flag is False and jdata["virustotal"]["scans"][scan]["detected"] is True:
+                    virus_flag = True
 
     # File information
 
@@ -765,9 +802,15 @@ def check_report(file_path, file_name):
 
                 data.append(sig_info)
 
+    # Creating of network check variable
+
+    check_jdata = ""
+    if "network" in jdata:
+        check_jdata = jdata["network"]
+
     # DNS connections
 
-    if "dns" in jdata["network"]:
+    if "dns" in check_jdata:
         for dns in jdata["network"]["dns"]:
             if "type" in dns and "request" in dns:
                 dns_info = {
@@ -783,7 +826,7 @@ def check_report(file_path, file_name):
 
     # HTTP connections
 
-    if "http" in jdata["network"]:
+    if "http" in check_jdata:
         for http in jdata["network"]["http"]:
             if "uri" in http and "host" in http:
                 http_info = {
@@ -799,7 +842,7 @@ def check_report(file_path, file_name):
 
     # TCP connections
 
-    if "tcp" in jdata["network"]:
+    if "tcp" in check_jdata:
         for tcp in jdata["network"]["tcp"]:
             if "src" in tcp and "dst" in tcp:
                 tcp_info = {
@@ -815,7 +858,7 @@ def check_report(file_path, file_name):
 
     # UDP connections
 
-    if "udp" in jdata["network"]:
+    if "udp" in check_jdata:
         for udp in jdata["network"]["udp"]:
             if "src" in udp and "dst" in udp:
                 udp_info = {
@@ -838,17 +881,18 @@ def check_report(file_path, file_name):
     # Processes
 
     if "pslist" in check_jdata:
-        for process in jdata["memory"]["pslist"]["data"]:
-            if "process_name" in process:
-                process_info = {
-                    "data_type":    "Process",
-                    "process_name": str(process["process_name"].encode("utf-8"))
-                }
+        if "data" in check_jdata["pslist"]:
+            for process in jdata["memory"]["pslist"]["data"]:
+                if "process_name" in process:
+                    process_info = {
+                        "data_type":    "Process",
+                        "process_name": str(process["process_name"].encode("utf-8"))
+                    }
 
-                data_id = check_data("process", process_info["process_name"])
+                    data_id = check_data("process", process_info["process_name"])
 
-                if data_id is False:
-                    data.append(process_info)
+                    if data_id is False:
+                        data.append(process_info)
 
     # Dropped files
 
@@ -879,7 +923,10 @@ def check_report(file_path, file_name):
 
     # Creating of behavior check variable
 
-    check_jdata = jdata["behavior"]["summary"]
+    check_jdata = ""
+    if "behavior" in jdata:
+        if "summary" in jdata["behavior"]:
+            check_jdata = jdata["behavior"]["summary"]
 
     # Loaded dlls
 
@@ -887,7 +934,7 @@ def check_report(file_path, file_name):
         for dll in jdata["behavior"]["summary"]["dll_loaded"]:
             dll_info = {
                 "data_type":    "DLL loaded",
-                "full_path":    str(dll.encode("utf-8").replace("\\", "/"))
+                "full_path":    str(dll.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("dll", dll_info["full_path"])
@@ -901,7 +948,7 @@ def check_report(file_path, file_name):
         for command in jdata["behavior"]["summary"]["command_line"]:
             command_info = {
                 "data_type":        "Command line",
-                "command":     str(command.encode("utf-8").replace("\\", "/"))
+                "command":     str(command.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("command_line", command_info["command"])
@@ -922,7 +969,7 @@ def check_report(file_path, file_name):
             file_info = {
                 "data_type":    "Deleted file",
                 "action_type":  "file_deleted",
-                "full_path":    str(file_temp.encode("utf-8").replace("\\", "/"))
+                "full_path":    str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
@@ -943,7 +990,7 @@ def check_report(file_path, file_name):
             file_info = {
                 "data_type":    "Created file",
                 "action_type":  "file_created",
-                "full_path":    str(file_temp.encode("utf-8").replace("\\", "/"))
+                "full_path":    str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
@@ -958,7 +1005,7 @@ def check_report(file_path, file_name):
             file_info = {
                 "data_type":    "Copied file",
                 "action_type":  "file_copied",
-                "full_path":    str(file_temp.encode("utf-8").replace("\\", "/"))
+                "full_path":    str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
@@ -973,7 +1020,7 @@ def check_report(file_path, file_name):
             file_info = {
                 "data_type":    "Opened file",
                 "action_type":  "file_opened",
-                "full_path":    str(file_temp.encode("utf-8").replace("\\", "/"))
+                "full_path":    str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
@@ -988,7 +1035,7 @@ def check_report(file_path, file_name):
             file_info = {
                 "data_type":    "Written file",
                 "action_type":  "file_written",
-                "full_path":    str(file_temp.encode("utf-8").replace("\\", "/"))
+                "full_path":    str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
@@ -1003,7 +1050,7 @@ def check_report(file_path, file_name):
             directory_info = {
                 "data_type":    "Created folder",
                 "action_type":  "directory_created",
-                "full_path":    str(directory.encode("utf-8").replace("\\", "/"))
+                "full_path":    str(directory.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("folder_action", directory_info["action_type"], directory_info["full_path"])
@@ -1018,7 +1065,7 @@ def check_report(file_path, file_name):
             directory_info = {
                 "data_type":    "Deleted folder",
                 "action_type":  "directory_removed",
-                "full_path":    str(directory.encode("utf-8").replace("\\", "/"))
+                "full_path":    str(directory.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("folder_action", directory_info["action_type"], directory_info["full_path"])
@@ -1033,7 +1080,7 @@ def check_report(file_path, file_name):
             regkey_info = {
                 "data_type":    "Written registry",
                 "action_type":  "regkey_written",
-                "full_path":    str(regkey.encode("utf-8").replace("\\", "/"))
+                "full_path":    str(regkey.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
@@ -1048,7 +1095,7 @@ def check_report(file_path, file_name):
             regkey_info = {
                 "data_type":    "Opened registry",
                 "action_type":  "regkey_opened",
-                "full_path":    str(regkey.encode("utf-8").replace("\\", "/"))
+                "full_path":    str(regkey.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
@@ -1063,7 +1110,7 @@ def check_report(file_path, file_name):
             regkey_info = {
                 "data_type":    "Deleted registry",
                 "action_type":  "regkey_deleted",
-                "full_path":    str(regkey.encode("utf-8").replace("\\", "/"))
+                "full_path":    str(regkey.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
@@ -1078,7 +1125,7 @@ def check_report(file_path, file_name):
             regkey_info = {
                 "data_type":    "Readed registry",
                 "action_type":  "regkey_read",
-                "full_path":    str(regkey.encode("utf-8").replace("\\", "/"))
+                "full_path":    str(regkey.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
             data_id = check_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
@@ -1167,7 +1214,7 @@ def size_db():
     return data
 
 
-# Function to check cuckoo status
+# Function to check cuckoo status (No finished - Cuckoo/Web_cuckoo problem)
 
 def cuckoo_status():
     result = subprocess.call(["pgrep", "cuckoo"])
@@ -1178,7 +1225,7 @@ def cuckoo_status():
         return "Stopped"
 
 
-# Function to check disk space (No finished)
+# Function to check disk space (No finished - Return used space, must return free space)
 
 def disk_space():
     result = subprocess.check_output(["du", "-shb", "/home/alex/.cuckoo"])
@@ -1188,3 +1235,16 @@ def disk_space():
     print("Usage disk space: " + str(disk_space_result) + "G")
 
     return disk_space_result
+
+# db - statistical info, correct all types
+# __ check_report - file information, some types unchecked
+# __ add_report - file information, types unchecked, not uncodered lines
+# check file type at upload
+# __ delete dump at final of scanning
+# check data to request with maximal size (200-500)
+# html report
+# test working, max time waiting between upload to request for correct work
+# css, html - no clear id, classes and some code
+# add files to db script
+# __ open json with hebrew/russian symbols error
+# virustotal check and correct file info
