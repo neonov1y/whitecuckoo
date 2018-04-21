@@ -43,7 +43,7 @@ function instruction(property) {
 	}
 }
 
-function upload_report() {
+function upload_process(server_function) {
 	var file = document.getElementById("uploadFile").files[0];
 	var xhttp = new XMLHttpRequest();
 	var form = new FormData();
@@ -145,8 +145,9 @@ function upload_report() {
 
 	// File send if size is valid
 	if (file.size/1024/1024 < 10) {
+		form.append("function_type", server_function);
 		form.append("file", file);
-		xhttp.open("POST", document.location.href + "file_upload", true);
+		xhttp.open("POST", document.location.origin + "/upload_process", true);
 		xhttp.send(form);
 
 		// Loading on
@@ -156,17 +157,13 @@ function upload_report() {
 		document.getElementById("loaderText").style.display = "block";
 
 		// Properties reset
-		document.getElementById("scanTime").value = "";
-		document.getElementById("memoryDump").checked = false;
+		// document.getElementById("scanTime").value = "";
+		// document.getElementById("memoryDump").checked = false;
 	}
 	else {
 		document.getElementById("uploadBlock").innerHTML = "";
 		add_message_block("Message", "File to much big, maximal size is 10M. File size: " + (file.size/1024/1024).toFixed(2).toString() + "M");
 	}
-}
-
-function upload_file() {
-
 }
 
 function add_message_block(str_type, str_data) {

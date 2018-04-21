@@ -30,34 +30,29 @@ def index():
                            command_line_number=data[7], cuckoo_status=cuckoo_status)
 
 
-@app.route('/upload', methods=['POST'])
-def upload():
-    # Save the uploaded file in the directory to uploads
-
-    f = request.files['file']
-    f.save('uploads/' + secure_filename(f.filename))
-
+@app.route('/admin_list')
+def admin_list():
     # Open MySQL connection
 
     functions.mysql_create_connection()
 
-    # Check the uploaded report
+    # Get information about program
 
-    data = functions.check_report("uploads/", secure_filename(f.filename))
-
-    # Delete uploaded file from host
-
-    subprocess.call(["rm", "uploads/" + secure_filename(f.filename)])
+    data = functions.size_db()
+    cuckoo_status = functions.cuckoo_status()
 
     # Close MySQL connection
 
     functions.mysql_close_connection()
 
-    return json.dumps(data)
+    return render_template('white_list.html', data_connections_number=data[0], files_number=data[1],
+                           file_actions_number=data[2], connections_number=data[3], process_number=data[4],
+                           registry_actions_number=data[5], dll_number=data[6],
+                           command_line_number=data[7], cuckoo_status=cuckoo_status)
 
 
-@app.route('/file_upload', methods=['POST'])
-def upload_file():
+@app.route('/upload_process', methods=['POST'])
+def upload_process():
     # Start time
 
     start_t = time.time()
@@ -81,25 +76,18 @@ def upload_file():
 
     # VBS file creation
 
-    vbs_code = "Dim objShell\n"\
-               + "Set objShell = WScript.CreateObject(\"WScript.Shell\")\n" \
-               + "objShell.Run \"cmd /c copy \\\\VBOXSVR\uploads\\" + uploaded_file_name \
-               + " C:\Users\\alex\Desktop\\" + uploaded_file_name + "\"\n" \
-               + "WScript.Sleep 1000\n" \
-               + "objShell.Run \"cmd /c start C:\Users\\alex\Desktop\\" + uploaded_file_name + "\""
+    vbs_file_name = functions.create_vbs(uploaded_file_name)
 
-    vbs_file_name = "uploads/file_" + str(random.randint(1, 100000)) + "_.vbs"
-    vbs_file = open(vbs_file_name, "w")
-    vbs_file.write(vbs_code)
-    vbs_file.close()
-
-    # Cuckoo running
+    # Cuckoo submit
 
     result = subprocess.check_output(["cuckoo", "submit", "--machine", "Cuckoo", "--timeout", "12", "--package",
                                       "vbs", vbs_file_name])
     result_pointer = result.find("ID #")
     report_id = result[result_pointer+4:len(result)-1]
     print("Task ID: " + report_id)
+
+    # Wait to report
+
     time.sleep(15)
 
     while 1:
@@ -121,10 +109,24 @@ def upload_file():
 
     functions.mysql_create_connection()
 
-    # Check the uploaded report
+    # Check/Add the uploaded report
 
     file_path = "/home/alex/.cuckoo/storage/analyses/" + str(report_id) + "/reports/"
-    data = functions.check_report(file_path, "report.json")
+
+    function_type = request.form["function_type"]
+    print(function_type)
+
+    data = ""
+
+    if function_type == "file_check":
+        data = functions.check_report(file_path, "report.json")
+    elif function_type == "file_add":
+        functions.add_report(file_path, "report.json")
+        data = [{
+            "data_type":    "Message",
+            "message":      "File added successfully to white-list."
+        }]
+        # copy report to special folder
 
     # Close MySQL connection
 
@@ -132,14 +134,8 @@ def upload_file():
 
     # Delete uploaded file from host and memory dump if exist
 
-    # subprocess.call(["rm", vbs_file_name])
     subprocess.call(["rm", "uploads/" + uploaded_file_name])
-
-    result = subprocess.check_output(["ls", "/home/alex/.cuckoo/storage/analyses/" + str(report_id) + "/memory.dmp"])
-    result_flag = result.find(str("memory.dmp"))
-    if result_flag is not -1:
-        subprocess.call(["rm", "/home/alex/.cuckoo/storage/analyses/" + str(report_id) + "/memory.dmp"])
-        print("Dump file deleted.")
+    functions.delete_memory_dump(report_id)
 
     # Stop time
 

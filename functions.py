@@ -4,6 +4,7 @@ import json
 import subprocess
 import mysql.connector
 from mysql.connector import errorcode
+import random
 
 
 # Functions
@@ -1236,6 +1237,35 @@ def disk_space():
 
     return disk_space_result
 
+
+# Function to create VBS file
+
+def create_vbs(uploaded_file_name):
+    vbs_code = "Dim objShell\n"\
+               + "Set objShell = WScript.CreateObject(\"WScript.Shell\")\n" \
+               + "objShell.Run \"cmd /c copy \\\\VBOXSVR\uploads\\" + uploaded_file_name \
+               + " C:\Users\\alex\Desktop\\" + uploaded_file_name + "\"\n" \
+               + "WScript.Sleep 1000\n" \
+               + "objShell.Run \"cmd /c start C:\Users\\alex\Desktop\\" + uploaded_file_name + "\""
+
+    vbs_file_name = "uploads/file_" + str(random.randint(1, 100000)) + "_.vbs"
+    vbs_file = open(vbs_file_name, "w")
+    vbs_file.write(vbs_code)
+    vbs_file.close()
+
+    return vbs_file_name
+
+
+# Function to delete memory dump if exist
+
+def delete_memory_dump(report_id):
+    result = subprocess.check_output(["ls", "/home/alex/.cuckoo/storage/analyses/" + str(report_id) + "/memory.dmp"])
+    result_flag = result.find(str("memory.dmp"))
+    if result_flag is not -1:
+        subprocess.call(["rm", "/home/alex/.cuckoo/storage/analyses/" + str(report_id) + "/memory.dmp"])
+        print("Dump file deleted.")
+
+
 # db - statistical info, correct all types
 # __ check_report - file information, some types unchecked
 # __ add_report - file information, types unchecked, not uncodered lines
@@ -1248,3 +1278,4 @@ def disk_space():
 # add files to db script
 # __ open json with hebrew/russian symbols error
 # virustotal check and correct file info
+# constants

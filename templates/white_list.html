@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Dashboard</title>
+		<title>Dashboard - White-list admin</title>
 		<meta charset="UTF-8" />
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_index.css') }}" />
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_admin.css') }}" />
 	</head>
 
 	<body>
@@ -15,7 +15,7 @@
 
 			<ul>
 				<li><a class="menuLink" onclick="menu(1);">Instruction</a></li>
-				<li><a class="menuLink" onclick="menu(2);">Scan</a></li>
+				<li><a class="menuLink" onclick="menu(2);">Change White-list</a></li>
 				<li><a class="menuLink" onclick="menu(3);">Statistic</a></li>
 			</ul>
 		</header>
@@ -54,23 +54,11 @@
 
                 <div align="center">
 					<div id="uploadProperties">
-                		<p id="center">Choise file to scan: </p>
-
-						<div class="propertiesContainer">
-							<input type="checkbox" class="switch" id="memoryDump" />
-							<p class="propertiesText">Memory Dump</p>
-						</div>
-
-						<div class="propertiesContainer">
-							<input type="text" class="inputProperty" id="scanTime" />
-							<p class="propertiesText">Scan time</p>
-						</div>
-
-						<br />
+                		<p id="center">Choise file to add to white-list: </p>
 
                 		<label id="uploadContainer">
-                			Upload & Scan
-                			<input type="file" id="uploadFile" onchange="upload_process('file_check')" formenctype="multipart/form-data" />
+                			Upload & Add
+                			<input type="file" id="uploadFile" onchange="upload_process('file_add')" formenctype="multipart/form-data" />
                 		</label>
 					</div>
 
@@ -80,25 +68,6 @@
 					<div id="uploadBlock" align="left"></div>
                 </div>
 			</article>
-
-			<!--
-			<article>
-				<h3>Scan files</h3>
-
-                <div align="center">
-                	<p id="center">Choise pdf or doc file to scan: </p>
-
-                	<label class="uploadContainer">
-                		Upload & Scan
-                		<input type="file" id="uploadFile" onchange="upload_file()" formenctype="multipart/form-data" />
-                	</label>
-
-					<div id="loaderSpinner" align="center"></div>
-
-					<div id="uploadBlock" align="left"></div>
-                </div>
-			</article>
-			-->
 
 			<article id="art3">
 				<h3>Statistic</h3>
