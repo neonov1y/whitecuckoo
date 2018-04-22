@@ -2,19 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8818235d-51d2-420e-8289-adf2f5e6a045" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/functions.py" afterPath="$PROJECT_DIR$/functions.py" />
       <change beforePath="$PROJECT_DIR$/server.py" afterPath="$PROJECT_DIR$/server.py" />
       <change beforePath="$PROJECT_DIR$/static/scriptAjax.js" afterPath="$PROJECT_DIR$/static/scriptAjax.js" />
-      <change beforePath="$PROJECT_DIR$/static/style_admin.css" afterPath="$PROJECT_DIR$/static/style_admin.css" />
-      <change beforePath="$PROJECT_DIR$/static/style_index.css" afterPath="$PROJECT_DIR$/static/style_index.css" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" afterPath="$PROJECT_DIR$/templates/index.html" />
-      <change beforePath="$PROJECT_DIR$/templates/white_list.html" afterPath="$PROJECT_DIR$/templates/white_list.html" />
       <change beforePath="$PROJECT_DIR$/testfile.py" afterPath="$PROJECT_DIR$/testfile.py" />
-      <change beforePath="$PROJECT_DIR$/uploads/18484PDF_1_datasheet_EN.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/uploads/49186PDF_1_datasheet_EN.pdf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/uploads/67871PDF_1_datasheet_EN.pdf" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/uploads/PDF_1_datasheet_EN.pdf" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/white_list_set/report_1_pdf.json" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/white_list_set/report_2_doc.json" afterPath="" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -28,8 +22,8 @@
       <file leaf-file-name="functions.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="1218" column="0" lean-forward="true" selection-start-line="1218" selection-start-column="0" selection-end-line="1218" selection-end-column="0" />
+            <state relative-caret-position="450">
+              <caret line="1359" column="16" lean-forward="true" selection-start-line="1359" selection-start-column="16" selection-end-line="1359" selection-end-column="16" />
               <folding>
                 <element signature="e#11#22#0" expanded="true" />
               </folding>
@@ -40,8 +34,8 @@
       <file leaf-file-name="testfile.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/testfile.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="14" column="22" lean-forward="true" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
+            <state relative-caret-position="486">
+              <caret line="33" column="81" lean-forward="false" selection-start-line="33" selection-start-column="81" selection-end-line="33" selection-end-column="81" />
               <folding>
                 <element signature="e#10#21#0" expanded="true" />
               </folding>
@@ -52,8 +46,8 @@
       <file leaf-file-name="server.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
-              <caret line="62" column="44" lean-forward="true" selection-start-line="62" selection-start-column="44" selection-end-line="62" selection-end-column="44" />
+            <state relative-caret-position="128">
+              <caret line="98" column="65" lean-forward="false" selection-start-line="98" selection-start-column="65" selection-end-line="98" selection-end-column="65" />
               <folding>
                 <element signature="e#0#49#0" expanded="true" />
               </folding>
@@ -105,15 +99,15 @@
         <option value="$PROJECT_DIR$/initialization.py" />
         <option value="$PROJECT_DIR$/templates/index.html" />
         <option value="$PROJECT_DIR$/templates/white_list.html" />
-        <option value="$PROJECT_DIR$/testfile.py" />
         <option value="$PROJECT_DIR$/server.py" />
+        <option value="$PROJECT_DIR$/testfile.py" />
         <option value="$PROJECT_DIR$/functions.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="378" />
-    <option name="y" value="24" />
+    <option name="x" value="380" />
+    <option name="y" value="23" />
     <option name="width" value="1455" />
     <option name="height" value="1020" />
   </component>
@@ -197,7 +191,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.testfile">
+  <component name="RunManager" selected="Python.server">
     <configuration name="flask" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -312,13 +306,12 @@
     <configuration />
   </component>
   <component name="ToolWindowManager">
-    <frame x="378" y="24" width="1455" height="1020" extended-state="0" />
-    <editor active="true" />
+    <frame x="380" y="23" width="1455" height="1020" extended-state="0" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16829608" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296146" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33695653" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33695653" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -518,30 +511,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="62" column="44" lean-forward="true" selection-start-line="62" selection-start-column="44" selection-end-line="62" selection-end-column="44" />
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/testfile.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="14" column="22" lean-forward="true" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
+        <state relative-caret-position="486">
+          <caret line="33" column="81" lean-forward="false" selection-start-line="33" selection-start-column="81" selection-end-line="33" selection-end-column="81" />
           <folding>
             <element signature="e#10#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="98" column="65" lean-forward="false" selection-start-line="98" selection-start-column="65" selection-end-line="98" selection-end-column="65" />
+          <folding>
+            <element signature="e#0#49#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="1218" column="0" lean-forward="true" selection-start-line="1218" selection-start-column="0" selection-end-line="1218" selection-end-column="0" />
+        <state relative-caret-position="450">
+          <caret line="1359" column="16" lean-forward="true" selection-start-line="1359" selection-start-column="16" selection-end-line="1359" selection-end-column="16" />
           <folding>
             <element signature="e#11#22#0" expanded="true" />
           </folding>

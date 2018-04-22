@@ -755,6 +755,7 @@ def check_report(file_path, file_name):
     virus_flag = False
     print_string = "check_report: "
     data = []
+    virus_array = ""
 
     # Open JSON file
 
@@ -769,10 +770,12 @@ def check_report(file_path, file_name):
     # Virustotal check
 
     if "scans" in check_jdata:
-        for scan in jdata["virustotal"]["scans"]:
-            if "detected" in scan:
-                if virus_flag is False and jdata["virustotal"]["scans"][scan]["detected"] is True:
+        for scan in check_jdata["scans"]:
+            if "detected" in check_jdata["scans"][scan]:
+                if check_jdata["scans"][scan]["detected"] is True:
                     virus_flag = True
+                    if "result" in check_jdata["scans"][scan]:
+                        virus_array = virus_array + check_jdata["scans"][scan]["result"] + ", "
 
     # File information
 
@@ -786,7 +789,8 @@ def check_report(file_path, file_name):
                     "type": str(jdata["info"]["package"]),
                     "size": str(jdata["target"]["file"]["size"]),
                     "md5":  str(jdata["target"]["file"]["md5"]),
-                    "flag_virustotal": virus_flag * 1
+                    "flag_virustotal": virus_flag * 1,
+                    "virus_array": virus_array
                 }
 
                 data.append(file_info)
@@ -1352,3 +1356,5 @@ def size_db():
 # virustotal check and correct file info
 # constants
 # __ learning set
+# __ virustotal flag + virus name
+# two js scripts

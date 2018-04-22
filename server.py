@@ -65,16 +65,15 @@ def upload_process():
             return json.dumps(message)
 
         # Save the uploaded file in the directory to uploads
+        path = "uploads/"
         f = request.files["file"]
-        uploaded_file_name = str(random.randint(1, 100000)) + secure_filename(f.filename)
-        f.save("uploads/" + uploaded_file_name)
+        uploaded_file_name = str(random.randint(1, 100000)) + "_" + secure_filename(f.filename)
+        f.save(path + uploaded_file_name)
 
-        # VBS file creation
-        vbs_file_name = functions.create_vbs(uploaded_file_name)
+        # Run Cuckoo
+        result = subprocess.check_output(["cuckoo", "submit", "--machine", "Cuckoo", "--timeout", "12",
+                                          path + uploaded_file_name])
 
-        # Cuckoo submit
-        result = subprocess.check_output(["cuckoo", "submit", "--machine", "Cuckoo", "--timeout", "12", "--package",
-                                          "vbs", vbs_file_name])
         result_pointer = result.find("ID #")
         report_id = result[result_pointer+4:len(result)-1]
         print("Task ID: " + report_id)
@@ -98,8 +97,7 @@ def upload_process():
         time.sleep(5)
 
         # Delete uploaded file from host and memory dump if exist
-        subprocess.call(["rm", vbs_file_name])
-        subprocess.call(["rm", "uploads/" + uploaded_file_name])
+        subprocess.call(["rm", path + uploaded_file_name])
         functions.delete_memory_dump(report_id)
 
         # Open MySQL connection

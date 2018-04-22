@@ -64,7 +64,7 @@ function upload_process(server_function) {
 					case "File info":
 						str_data = "name: " + object[i].name + "<br /> type: " + object[i].type + "<br /> size: ";
 						str_data += object[i].size + "<br /> md5: " + object[i].md5 + "<br /> virustotal flag: ";
-						str_data += object[i].flag_virustotal;
+						str_data += object[i].flag_virustotal + "<br /> virus_array: " + object[i].virus_array;
 						break;
 					case "Signature":
 						str_data = "description: " + object[i].description;
