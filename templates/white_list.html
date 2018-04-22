@@ -14,7 +14,7 @@
 			</div>
 
 			<ul>
-				<li><a class="menuLink" onclick="menu(1);">Instruction</a></li>
+				<!--<li><a class="menuLink" onclick="menu(1);">Instruction</a></li>-->
 				<li><a class="menuLink" onclick="menu(2);">Change White-list</a></li>
 				<li><a class="menuLink" onclick="menu(3);">Statistic</a></li>
 			</ul>
@@ -50,13 +50,24 @@
 			</article>
 
 			<article id="art2">
-				<h3>Reports scan</h3>
+				<h3>White-list</h3>
 
                 <div align="center">
 					<div id="uploadProperties">
-                		<p id="center">Choise file to add to white-list: </p>
+                		<p>
+                            Delete all data from the white-list:
+                            <a class="uploadLink" onclick="upload_process('clear_list')">Clear</a>
+                            <br />
+                            Learn standart reports set:
+                            <a class="uploadLink" onclick="upload_process('learn_set')">Learn</a>
+                            <br />
+                            Reset statistical data:
+                            <a class="uploadLink" onclick="upload_process('statistic_reset')">Reset</a>
+                        </p>
 
-                		<label id="uploadContainer">
+                		<p class="center">Choise file to creat report and add to white-list: </p>
+
+                		<label class="uploadContainer">
                 			Upload & Add
                 			<input type="file" id="uploadFile" onchange="upload_process('file_add')" formenctype="multipart/form-data" />
                 		</label>
@@ -73,16 +84,16 @@
 				<h3>Statistic</h3>
 
 				<p>
-					{% if cuckoo_status == "Stopped" %}
-						Cuckoo status: <font color="red">{{ cuckoo_status }}</font><br />
+					{% if cuckoo_status == 0 %}
+						Cuckoo status: <font color="red">Stopped</font><br />
 					{% else %}
-						Cuckoo status: <font color="green">{{ cuckoo_status }}</font><br />
+						Cuckoo status: <font color="green">Available</font><br />
 					{% endif %}
 
 					White-list files: {{ files_number }} <br />
-					Scanned files: <br />
-					Total database size: _ mb <br />
-					Average scanning time: <br />
+					Scanned files: {{ scans }}<br />
+					Total database size: {{ size_db }} MB <br />
+					Average scanning time: {{ average_scan_time }} seconds <br />
 				</p>
 
 			<canvas id="canvasChart"></canvas>

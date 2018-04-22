@@ -95,11 +95,11 @@ p {
 }
 
 ::-moz-selection {
-	background-color: #C0C096;
+	background-color: #F9A7B0;
 }
 
 ::selection {
-	background-color: #C0C096;
+	background-color: #F9A7B0;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -154,7 +154,7 @@ a.menuLink {
 }
 
 a.menuLink:hover {
-	background-color: #F6EFC2;
+	background-color: #FC6C85;
 	color: black;
 }
 
@@ -163,7 +163,7 @@ a.menuLink:hover {
 }
 
 #dashboard {
-	color: #F6EFC2;
+	color: #FC6C85;
 	background-color: black;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 16px;
@@ -171,7 +171,7 @@ a.menuLink:hover {
 }
 
 nav {
-    background-color: #F6EFC2;
+    background-color: #FC6C85;
     min-height: 80px;
     padding-top: 80px;
     padding-bottom: 30px;
@@ -181,7 +181,7 @@ nav {
 
 #navText {
     background-color: black;
-    color: #F6EFC2;
+    color: #FC6C85;
     font-size: 23px;
     display: inline;
 }
@@ -205,8 +205,8 @@ nav {
 }
 
 .instLink:hover {
-	color: #666655;
-    border-color: #666655;
+	color: #444444;
+    border-color: #444444;
     margin-left: 5px;
     padding-left: 11px;
     padding-right: 11px;
@@ -218,7 +218,7 @@ nav {
 }
 
 #instruction {
-    background-color: #C5BF9B;
+    background-color: #FBBBB9;
     padding-top: 0px;
 	display: none;
 /*
@@ -263,11 +263,11 @@ article {
 	display: none;
 }
 
-#center {
+.center {
 	text-align: center;
 }
 
-#uploadContainer {
+.uploadContainer {
 	background-color: #333333;
     color: white;
     padding: 5px;
@@ -284,14 +284,26 @@ article {
 	cursor: pointer;
 }
 
-#uploadContainer:hover {
+.uploadContainer:hover {
 	color: #C0C0C0;
     padding-left: 20px;
     padding-right: 20px;
 }
 
-#uploadContainer [type=file] {
+.uploadContainer [type=file] {
 	display: none;
+}
+
+.uploadLink {
+	color: black;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.uploadLink:hover {
+	color: #FC6C85;
 }
 
 #loaderSpinner {
@@ -363,68 +375,6 @@ article {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 12px;
 	word-wrap: break-word;
-}
-
-.propertiesContainer {
-	display: inline-block;
-	margin-left: 5px;
-}
-
-.propertiesText {
-	color: #666666;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 13px;
-	font-weight: bold;
-	text-align: center;
-}
-
-input[type="text"].inputProperty {
-	display: inline;
-	width: 50px;
-	height: 15px;
-	color: #444444;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 12px;
-}
-
-input[type="checkbox"].switch {
-	font-size: 12px;
-	-webkit-appearance: none;
-	   -moz-appearance: none;
-	        appearance: none;
-	width: 3.5em;
-	height: 1.5em;
-	background: #DDDDDD;
-	border-radius: 3em;
-	position: relative;
-	cursor: pointer;
-	outline: none;
-	-webkit-transition: all .2s ease-in-out;
-	transition: all .2s ease-in-out;
-  }
-  
-input[type="checkbox"].switch:checked {
-	background: #F75D59;
-}
-  
-input[type="checkbox"].switch:after {
-	position: absolute;
-	content: "";
-	width: 1.5em;
-	height: 1.5em;
-	border-radius: 50%;
-	background: #FFFFFF;
-	-webkit-box-shadow: 0 0 .25em rgba(0,0,0,.3);
-	        box-shadow: 0 0 .25em rgba(0,0,0,.3);
-	-webkit-transform: scale(.7);
-	        transform: scale(.7);
-	left: 0;
-	-webkit-transition: all .2s ease-in-out;
-	transition: all .2s ease-in-out;
-}
-  
-input[type="checkbox"].switch:checked:after {
-	left: calc(100% - 1.5em);
 }
 
 /* Footer */

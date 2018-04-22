@@ -44,7 +44,9 @@ function instruction(property) {
 }
 
 function upload_process(server_function) {
-	var file = document.getElementById("uploadFile").files[0];
+	if (server_function == "file_check" || server_function == "file_add") var file = document.getElementById("uploadFile").files[0];
+	else var file = {"size": 0}
+
 	var xhttp = new XMLHttpRequest();
 	var form = new FormData();
 
@@ -129,32 +131,26 @@ function upload_process(server_function) {
 
 				str_type = object[i].data_type;
 
-				if (i == 0) add_message_block("Message", "New data detected.");
+				// if (i == 0) add_message_block("Message", "New data detected.");
 
 				add_message_block(str_type, str_data);
 			}
 
-			if (i == 0) add_message_block("Message", "New data not detected.");
+			// if (i == 0) add_message_block("Message", "New data not detected.");
 
 			// Loading off
-			document.getElementById("uploadProperties").style.display = "inline-block";
-			document.getElementById("loaderSpinner").style.display = "none";
-			document.getElementById("loaderText").style.display = "none";
+			loading(0);
 		}
 	}
 
-	// File send if size is valid
-	if (file.size/1024/1024 < 10) {
+	if (file.size/1024/1024 < 10 || server_function == "clear_list" || server_function == "learn_set" || server_function == "statistic_reset") {
 		form.append("function_type", server_function);
-		form.append("file", file);
+		if (server_function == "file_check" || server_function == "file_add") form.append("file", file);
 		xhttp.open("POST", document.location.origin + "/upload_process", true);
 		xhttp.send(form);
 
 		// Loading on
-		document.getElementById("uploadBlock").innerHTML = "";
-		document.getElementById("uploadProperties").style.display = "none";
-		document.getElementById("loaderSpinner").style.display = "block";
-		document.getElementById("loaderText").style.display = "block";
+		loading(1);
 
 		// Properties reset
 		// document.getElementById("scanTime").value = "";
@@ -163,6 +159,22 @@ function upload_process(server_function) {
 	else {
 		document.getElementById("uploadBlock").innerHTML = "";
 		add_message_block("Message", "File to much big, maximal size is 10M. File size: " + (file.size/1024/1024).toFixed(2).toString() + "M");
+	}
+}
+
+function loading(switch_var) {
+	switch (switch_var) {
+		case 1:
+			document.getElementById("uploadBlock").innerHTML = "";
+			document.getElementById("uploadProperties").style.display = "none";
+			document.getElementById("loaderSpinner").style.display = "block";
+			document.getElementById("loaderText").style.display = "block";
+			break;
+		case 0:
+			document.getElementById("uploadProperties").style.display = "block";
+			document.getElementById("loaderSpinner").style.display = "none";
+			document.getElementById("loaderText").style.display = "none";
+			break;
 	}
 }
 

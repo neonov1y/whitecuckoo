@@ -12,6 +12,13 @@ virus_flag = False
 
 cursor = functions.mysql_create_connection()
 
+functions.disk_space()
+# functions.size_db()
+# functions.statistic_reset()
+# functions.statistic_change(True, 5)
+# a, b = functions.statistic_change(False)
+# print(str(a) + " " + str(b))
+
 # functions.clear_db()
 
 # functions.cuckoo_status()

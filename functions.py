@@ -1170,9 +1170,9 @@ def clear_db():
     print("%-30s" % print_string + "%s" % "Data deleted.")
 
 
-# Function to count database size
+# Function to count database length
 
-def size_db():
+def length_db():
     # Function return number of elements in database sorted by type of data
     # data[0] - number of connection data
     # data[1] - number of files in database
@@ -1215,23 +1215,40 @@ def size_db():
     return data
 
 
-# Function to check cuckoo status (No finished - Cuckoo/Web_cuckoo problem)
+# Function to check cuckoo status (Recognize cuckoo web interface too)
 
 def cuckoo_status():
     result = subprocess.call(["pgrep", "cuckoo"])
 
     if result is not 1:
-        return "Available"
+        return 1
     else:
-        return "Stopped"
+        return 0
 
 
-# Function to check disk space (No finished - Return used space, must return free space)
+# Function to check disk space
 
 def disk_space():
-    result = subprocess.check_output(["du", "-shb", "/home/alex/.cuckoo"])
-    result_pointer = result.find("	")
-    disk_space_result = float(result[0:result_pointer])/1073741824
+    # result = subprocess.check_output(["du", "-shb", "/home/alex/.cuckoo"])
+    # result_pointer = result.find("	")
+    # disk_space_result = float(result[0:result_pointer])/1073741824
+
+    # print("Usage disk space: " + str(disk_space_result) + "G")
+
+    # return disk_space_result
+
+    result = subprocess.check_output(["df", "-h", "/home"]).split('\n')[1].split(' ')
+    result = filter(None, result)[3]
+    scale = result[len(result)-1]
+
+    if scale == "G":
+        disk_space_result = float(result[0:len(result)-1])
+    elif scale == "M":
+        disk_space_result = float(result[0:len(result)-1])/1024
+    elif scale == "K":
+        disk_space_result = float(result[0:len(result)-1])/(1024 * 1024)
+    else:
+        disk_space_result = 0
 
     print("Usage disk space: " + str(disk_space_result) + "G")
 
@@ -1256,17 +1273,72 @@ def create_vbs(uploaded_file_name):
     return vbs_file_name
 
 
-# Function to delete memory dump if exist
+# Function to delete memory dump if exist (Tested with build-in strings)
 
 def delete_memory_dump(report_id):
-    result = subprocess.check_output(["ls", "/home/alex/.cuckoo/storage/analyses/" + str(report_id) + "/memory.dmp"])
+    result = subprocess.check_output(["ls", "/home/alex/.cuckoo/storage/analyses/" + str(report_id)])
     result_flag = result.find(str("memory.dmp"))
+
     if result_flag is not -1:
         subprocess.call(["rm", "/home/alex/.cuckoo/storage/analyses/" + str(report_id) + "/memory.dmp"])
         print("Dump file deleted.")
 
 
-# db - statistical info, correct all types
+# Function to change or return statistical data
+
+def statistic_change(function_type, scan_time=0):
+    # function_type == True - Add scanned file and change average scan time
+    # function_type == False - Return number of scans and average scan time
+    if function_type is True:
+        query = "SELECT * FROM statistic LIMIT 1"
+        cursor.execute(query)
+        item = cursor.fetchone()
+
+        average_scan_time = (item[1] * item[0] + scan_time)/(item[0] + 1)
+        scans = item[0] + 1
+
+        add_string = "UPDATE statistic SET scans = %s, average_scan_time = %s"
+        data = (scans, average_scan_time)
+
+        cursor.execute(add_string, data)
+        db.commit()
+
+    elif function_type is False:
+        query = "SELECT * FROM statistic LIMIT 1"
+        cursor.execute(query)
+        item = cursor.fetchone()
+
+        return item[0], item[1]
+
+
+# Function to reset statistical data
+
+def statistic_reset():
+    add_string = "UPDATE statistic SET scans = %s, average_scan_time = %s"
+    data = (0, 0.0)
+
+    cursor.execute(add_string, data)
+    db.commit()
+
+    print("Statistical data reseted.")
+
+
+# Function to return database size
+
+def size_db():
+    # query = "SELECT table_schema AS 'Database', SUM(data_length + index_length) \
+    #  / 1024 / 1024 AS 'Size (MB)' FROM information_schema.TABLES GROUP BY table_schema LIMIT 1"
+
+    query = "SELECT table_schema AS 'Database', SUM(data_length + index_length) \
+     / 1024 / 1024 AS 'Size (MB)' FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'cuckoo'"
+
+    cursor.execute(query)
+    item = cursor.fetchone()
+
+    return item[1]
+
+
+# __ db - statistical info, correct all types
 # __ check_report - file information, some types unchecked
 # __ add_report - file information, types unchecked, not uncodered lines
 # check file type at upload
@@ -1275,7 +1347,8 @@ def delete_memory_dump(report_id):
 # html report
 # test working, max time waiting between upload to request for correct work
 # css, html - no clear id, classes and some code
-# add files to db script
+# __ add files to db script
 # __ open json with hebrew/russian symbols error
 # virustotal check and correct file info
 # constants
+# __ learning set

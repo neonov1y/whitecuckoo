@@ -133,31 +133,6 @@ header {
   	z-index: 1000;
 }
 
-ul {
-	list-style-type: none;
-	display: inline;
-}
-
-li {
-	display: inline;
-}
-
-a.menuLink {
-	color: white;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 17px;
-	text-transform: uppercase;
-	text-decoration: none;
-	display: inline;
-	padding: 7px;
-	transition: 0.5s;
-}
-
-a.menuLink:hover {
-	background-color: #F6EFC2;
-	color: black;
-}
-
 #dashboartContainer {
 	display: inline;
 }
@@ -239,8 +214,6 @@ nav {
     animation: show 0.5s ease-in-out;
 }
 
-
-
 /* Section */
 
 section {
@@ -259,11 +232,7 @@ article {
 	animation: show 0.4s ease-in-out;
 }
 
-#art1, #art2 {
-	display: none;
-}
-
-#center {
+.center {
 	text-align: center;
 }
 
