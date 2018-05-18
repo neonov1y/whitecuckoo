@@ -65,12 +65,16 @@
                             <a class="uploadLink" onclick="request_process('statistic_reset')">Reset</a>
                         </p>
 
-                		<p class="center">Choise file to creat report and add to white-list: </p>
+                        {% if cuckoo_status == True %}
+                            <p class="center">Choise file to creat report and add to white-list: </p>
 
-                		<label class="uploadContainer">
-                			Upload & Add
-                			<input type="file" id="uploadFile" onchange="request_process('file_add')" formenctype="multipart/form-data" />
-                		</label>
+                            <label class="uploadContainer">
+                                Upload & Add
+                                <input type="file" id="uploadFile" onchange="request_process('file_add')" formenctype="multipart/form-data" />
+                            </label>
+						{% else %}
+							<p class="center">Sorry, Cuckoo Sandbox not available now to add files to data base. </p>
+						{% endif %}
 					</div>
 
 					<div id="loaderSpinner" align="center"></div>
@@ -117,6 +121,6 @@
 		</script>
 		<script type="text/javascript" src="{{ url_for('static', filename='chartMin.js') }}"></script>
 		<script type="text/javascript" src="{{ url_for('static', filename='scriptChart.js') }}"></script>
-		<script type="text/javascript" src="{{ url_for('static', filename='scriptAjax.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='scriptAjaxAdmin.js') }}"></script>
 	</body>
 </html>

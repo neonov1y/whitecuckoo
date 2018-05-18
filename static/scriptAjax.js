@@ -70,7 +70,7 @@ function request_process(server_function) {
 						str_data = "description: " + object[i].description;
 						break;
 					case "DNS connection":
-						str_data = "type: " + object[i].type + "<br /> request: " + object[i].request;
+						str_data = "type: " + object[i].type + "<br /> request: " + object[i].request + "<br /> answer: " + object[i].answer;
 						break;
 					case "HTTP connection":
 						str_data = "url: " + object[i].url + "<br /> host: " + object[i].host;
@@ -146,6 +146,7 @@ function request_process(server_function) {
 	if (file.size/1024/1024 < 10 || server_function == "clear_list" || server_function == "learn_set" || server_function == "statistic_reset") {
 		form.append("function_type", server_function);
 		if (server_function == "file_check" || server_function == "file_add") form.append("file", file);
+		if (server_function == "file_check") form.append("memory_dump", document.getElementById("memoryDump").checked);
 		xhttp.open("POST", document.location.origin + "/upload_process", true);
 		xhttp.send(form);
 
@@ -154,7 +155,7 @@ function request_process(server_function) {
 
 		// Properties reset
 		// document.getElementById("scanTime").value = "";
-		// document.getElementById("memoryDump").checked = false;
+		document.getElementById("memoryDump").checked = false;
 	}
 	else {
 		document.getElementById("uploadBlock").innerHTML = "";

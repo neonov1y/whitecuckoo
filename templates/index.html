@@ -25,7 +25,14 @@
 
 		<div id="instruction">
             <p id="instText">
-                Instruction.
+                <b>Files types</b><br />
+                System oriented on tree main types PDF, DOC, DOCX.<br /><br />
+                <b>Maximal size</b><br />
+                Maximal available size of file is 20MB.<br /><br />
+                <b>Scan data</b><br />
+                Data which you will see in the report:<br />
+                - Data about file: name, type, size, MD5, result of anti viruses scan<br />
+                - Data about file: name, type, size, MD5, result of anti viruses scan<br />
             </p>
         </div>
 
@@ -43,12 +50,12 @@
 								<input type="checkbox" class="switch" id="memoryDump" />
 								<p class="propertiesText">Memory Dump</p>
 							</div>
-
+							<!--
 							<div class="propertiesContainer">
 								<input type="text" class="inputProperty" id="scanTime" />
 								<p class="propertiesText">Scan time</p>
 							</div>
-
+							-->
 							<br />
 
 							<label id="uploadContainer">
@@ -73,6 +80,6 @@
 			<p id="footerText">Footer</p>
 		</footer>
 
-		<script type="text/javascript" src="{{ url_for('static', filename='scriptAjax.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='scriptAjaxIndex.js') }}"></script>
 	</body>
 </html>

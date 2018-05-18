@@ -4,7 +4,6 @@ import json
 import subprocess
 import mysql.connector
 from mysql.connector import errorcode
-import random
 import os
 
 # Dependences
@@ -20,6 +19,9 @@ MYSQL_TABLES = ["connection_type", "file", "file_action", "file_dropped", "folde
                 "network_http", "network_tcp", "network_udp", "process", "registry_action", "dll", "command_line"]
 PATH_ANALYSES = "/home/alex/.cuckoo/storage/analyses/"
 PATH_STANDART_SET = "/home/alex/PycharmProjects/Cuckoo/white_list_set/"
+PATH_UPLOADS = "/home/alex/PycharmProjects/Cuckoo/uploads/"
+CONF_CUCKOO_VM = "Cuckoo"
+CONF_CUCKOO_SCAN_TIME = "12"
 
 
 # Functions
@@ -83,15 +85,12 @@ def mysql_create_connection():
     print_string = "mysql_create_connection: "
 
     try:
-        global cursor
-        global db
-
         db = mysql.connector.connect(**mysql_parameters)
         cursor = db.cursor()
 
         print("%-30s" % print_string + "%s" % "MySQL connection created.")
 
-        return cursor
+        return db, cursor
 
     except errorcode as err:
         if err.errno == err.ER_ACCESS_DENIED_ERROR:
@@ -104,7 +103,7 @@ def mysql_create_connection():
 
 # Function to close MySQL connection
 
-def mysql_close_connection():
+def mysql_close_connection(db, cursor):
     # If connection closed successfully, function return True
     # Else error exit
 
@@ -135,7 +134,7 @@ def error_exit(error_message):
 
 # Function to insert data to MySQL
 
-def insert_data(data_type, data1, data2="", data3="", data4="", data5=""):
+def insert_data(db, cursor, data_type, data1, data2="", data3="", data4="", data5=""):
     # data_type - input variable which define type of data to insert
     # data1, data2, data3, data4, data5 - input data
     # If data inserted successfully, function return True
@@ -255,7 +254,7 @@ def insert_data(data_type, data1, data2="", data3="", data4="", data5=""):
 
 # Function to check existence of data in MySQL
 
-def check_data(data_type, data1, data2="", data3="", data4="", data5=""):
+def check_data(cursor, data_type, data1, data2="", data3="", data4="", data5=""):
     # data_type - input variable which define type of data to check
     # data1, data2, data3, data4, data5 - input data
     # If data exist in database, function return id of data in database
@@ -355,7 +354,7 @@ def check_data(data_type, data1, data2="", data3="", data4="", data5=""):
 
 # Function to add report to database
 
-def add_report(file_path, file_name):
+def add_report(db, cursor, file_path, file_name):
     # file_path - path to file
     # file_name - name of file
     # Before function call MySQL connection must be created
@@ -396,7 +395,7 @@ def add_report(file_path, file_name):
                     "flag_virustotal": virus_flag * 1
                 }
 
-                file_id = insert_data("file", file_info["name"], file_info["type"],
+                file_id = insert_data(db, cursor, "file", file_info["name"], file_info["type"],
                                       file_info["size"], file_info["md5"], file_info["flag_virustotal"])
             else:
                 json_close()
@@ -424,12 +423,12 @@ def add_report(file_path, file_name):
                     "request":  str(dns["request"].encode("utf-8"))
                 }
 
-                data_id = check_data("network_dns", dns_info["type"], dns_info["request"])
+                data_id = check_data(cursor, "network_dns", dns_info["type"], dns_info["request"])
 
                 if data_id is False:
-                    data_id = insert_data("network_dns", dns_info["type"], dns_info["request"])
+                    data_id = insert_data(db, cursor, "network_dns", dns_info["type"], dns_info["request"])
 
-                insert_data("connection_type", "network_dns", file_id, data_id)
+                insert_data(db, cursor, "connection_type", "network_dns", file_id, data_id)
 
     # Insert HTTP connections
 
@@ -441,12 +440,12 @@ def add_report(file_path, file_name):
                     "host":     str(http["host"].encode("utf-8"))
                 }
 
-                data_id = check_data("network_http", http_info["url"], http_info["host"])
+                data_id = check_data(cursor, "network_http", http_info["url"], http_info["host"])
 
                 if data_id is False:
-                    data_id = insert_data("network_http", http_info["url"], http_info["host"])
+                    data_id = insert_data(db, cursor, "network_http", http_info["url"], http_info["host"])
 
-                insert_data("connection_type", "network_http", file_id, data_id)
+                insert_data(db, cursor, "connection_type", "network_http", file_id, data_id)
 
     # Insert TCP connections
 
@@ -458,12 +457,12 @@ def add_report(file_path, file_name):
                     "destination":  str(tcp["dst"].encode("utf-8"))
                 }
 
-                data_id = check_data("network_tcp", tcp_info["source"], tcp_info["destination"])
+                data_id = check_data(cursor, "network_tcp", tcp_info["source"], tcp_info["destination"])
 
                 if data_id is False:
-                    data_id = insert_data("network_tcp", tcp_info["source"], tcp_info["destination"])
+                    data_id = insert_data(db, cursor, "network_tcp", tcp_info["source"], tcp_info["destination"])
 
-                insert_data("connection_type", "network_tcp", file_id, data_id)
+                insert_data(db, cursor, "connection_type", "network_tcp", file_id, data_id)
 
     # Insert UDP connections
 
@@ -475,12 +474,12 @@ def add_report(file_path, file_name):
                     "destination":  str(udp["dst"].encode("utf-8"))
                 }
 
-                data_id = check_data("network_udp", udp_info["source"], udp_info["destination"])
+                data_id = check_data(cursor, "network_udp", udp_info["source"], udp_info["destination"])
 
                 if data_id is False:
-                    data_id = insert_data("network_udp", udp_info["source"], udp_info["destination"])
+                    data_id = insert_data(db, cursor, "network_udp", udp_info["source"], udp_info["destination"])
 
-                insert_data("connection_type", "network_udp", file_id, data_id)
+                insert_data(db, cursor, "connection_type", "network_udp", file_id, data_id)
 
     # Creating of memory check variable
 
@@ -498,12 +497,12 @@ def add_report(file_path, file_name):
                         "process_name": str(process["process_name"].encode("utf-8"))
                     }
 
-                    data_id = check_data("process", process_info["process_name"])
+                    data_id = check_data(cursor, "process", process_info["process_name"])
 
                     if data_id is False:
-                        data_id = insert_data("process", process_info["process_name"])
+                        data_id = insert_data(db, cursor, "process", process_info["process_name"])
 
-                    insert_data("connection_type", "process", file_id, data_id)
+                    insert_data(db, cursor, "connection_type", "process", file_id, data_id)
 
     # Insert dropped files
 
@@ -525,14 +524,14 @@ def add_report(file_path, file_name):
                     "size":     str(file_temp["size"]),
                 }
 
-                data_id = check_data("file_dropped", file_info["path"], file_info["type"],
+                data_id = check_data(cursor, "file_dropped", file_info["path"], file_info["type"],
                                      file_info["process"], file_info["size"])
 
                 if data_id is False:
-                    data_id = insert_data("file_dropped", file_info["path"], file_info["type"],
+                    data_id = insert_data(db, cursor, "file_dropped", file_info["path"], file_info["type"],
                                           file_info["process"], file_info["size"])
 
-                insert_data("connection_type", "file_dropped", file_id, data_id)
+                insert_data(db, cursor, "connection_type", "file_dropped", file_id, data_id)
 
     # Creating of behavior check variable
 
@@ -550,12 +549,12 @@ def add_report(file_path, file_name):
                 "full_path":    str(dll.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("dll", dll_info["full_path"])
+            data_id = check_data(cursor, "dll", dll_info["full_path"])
 
             if data_id is False:
-                data_id = insert_data("dll", dll_info["full_path"])
+                data_id = insert_data(db, cursor, "dll", dll_info["full_path"])
 
-            insert_data("connection_type", "dll", file_id, data_id)
+            insert_data(db, cursor, "connection_type", "dll", file_id, data_id)
 
     # Insert command line
 
@@ -566,12 +565,12 @@ def add_report(file_path, file_name):
                 "command":      str(command.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("command_line", command_info["command"])
+            data_id = check_data(cursor, "command_line", command_info["command"])
 
             if data_id is False:
-                data_id = insert_data("command_line", command_info["command"])
+                data_id = insert_data(db, cursor, "command_line", command_info["command"])
 
-            insert_data("connection_type", "command_line", file_id, data_id)
+            insert_data(db, cursor, "connection_type", "command_line", file_id, data_id)
 
     # Insert opened files
 
@@ -582,12 +581,12 @@ def add_report(file_path, file_name):
                 "full_path": str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
+            data_id = check_data(cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
             if data_id is False:
-                data_id = insert_data("file_action", file_info["action_type"], file_info["full_path"])
+                data_id = insert_data(db, cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
-            insert_data("connection_type", "file_action", file_id, data_id)
+            insert_data(db, cursor, "connection_type", "file_action", file_id, data_id)
 
     # Insert created files
 
@@ -598,12 +597,12 @@ def add_report(file_path, file_name):
                 "full_path": str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
+            data_id = check_data(cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
             if data_id is False:
-                data_id = insert_data("file_action", file_info["action_type"], file_info["full_path"])
+                data_id = insert_data(db, cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
-            insert_data("connection_type", "file_action", file_id, data_id)
+            insert_data(db, cursor, "connection_type", "file_action", file_id, data_id)
 
     # Insert copied files
 
@@ -614,12 +613,12 @@ def add_report(file_path, file_name):
                 "full_path": str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
+            data_id = check_data(cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
             if data_id is False:
-                data_id = insert_data("file_action", file_info["action_type"], file_info["full_path"])
+                data_id = insert_data(db, cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
-            insert_data("connection_type", "file_action", file_id, data_id)
+            insert_data(db, cursor, "connection_type", "file_action", file_id, data_id)
 
     # Insert written files
     
@@ -630,12 +629,12 @@ def add_report(file_path, file_name):
                 "full_path": str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
+            data_id = check_data(cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
             if data_id is False:
-                data_id = insert_data("file_action", file_info["action_type"], file_info["full_path"])
+                data_id = insert_data(db, cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
-            insert_data("connection_type", "file_action", file_id, data_id)
+            insert_data(db, cursor, "connection_type", "file_action", file_id, data_id)
 
     # Insert deleted files
     # Detect all files except .tmp and .TMP
@@ -652,12 +651,12 @@ def add_report(file_path, file_name):
                 "full_path": str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
+            data_id = check_data(cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
             if data_id is False:
-                data_id = insert_data("file_action", file_info["action_type"], file_info["full_path"])
+                data_id = insert_data(db, cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
-            insert_data("connection_type", "file_action", file_id, data_id)
+            insert_data(db, cursor, "connection_type", "file_action", file_id, data_id)
 
     # Insert created folders
 
@@ -668,12 +667,13 @@ def add_report(file_path, file_name):
                 "full_path": str(directory.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("folder_action", directory_info["action_type"], directory_info["full_path"])
+            data_id = check_data(cursor, "folder_action", directory_info["action_type"], directory_info["full_path"])
 
             if data_id is False:
-                data_id = insert_data("folder_action", directory_info["action_type"], directory_info["full_path"])
+                data_id = insert_data(db, cursor, "folder_action", directory_info["action_type"],
+                                      directory_info["full_path"])
 
-            insert_data("connection_type", "folder_action", file_id, data_id)
+            insert_data(db, cursor, "connection_type", "folder_action", file_id, data_id)
 
     # Insert deleted folders
 
@@ -684,12 +684,13 @@ def add_report(file_path, file_name):
                 "full_path": str(directory.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("folder_action", directory_info["action_type"], directory_info["full_path"])
+            data_id = check_data(cursor, "folder_action", directory_info["action_type"], directory_info["full_path"])
 
             if data_id is False:
-                data_id = insert_data("folder_action", directory_info["action_type"], directory_info["full_path"])
+                data_id = insert_data(db, cursor, "folder_action", directory_info["action_type"],
+                                      directory_info["full_path"])
 
-            insert_data("connection_type", "folder_action", file_id, data_id)
+            insert_data(db, cursor, "connection_type", "folder_action", file_id, data_id)
 
     # Insert written registry
 
@@ -700,12 +701,13 @@ def add_report(file_path, file_name):
                 "full_path": str(regkey.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
+            data_id = check_data(cursor, "registry_action", regkey_info["action_type"], regkey_info["full_path"])
 
             if data_id is False:
-                data_id = insert_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
+                data_id = insert_data(db, cursor, "registry_action", regkey_info["action_type"],
+                                      regkey_info["full_path"])
 
-            insert_data("connection_type", "registry_action", file_id, data_id)
+            insert_data(db, cursor, "connection_type", "registry_action", file_id, data_id)
 
     # Insert opened registry
 
@@ -716,12 +718,13 @@ def add_report(file_path, file_name):
                 "full_path": str(regkey.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
+            data_id = check_data(cursor, "registry_action", regkey_info["action_type"], regkey_info["full_path"])
 
             if data_id is False:
-                data_id = insert_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
+                data_id = insert_data(db, cursor, "registry_action", regkey_info["action_type"],
+                                      regkey_info["full_path"])
 
-            insert_data("connection_type", "registry_action", file_id, data_id)
+            insert_data(db, cursor, "connection_type", "registry_action", file_id, data_id)
 
     # Insert deleted registry
 
@@ -732,12 +735,13 @@ def add_report(file_path, file_name):
                 "full_path": str(regkey.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
+            data_id = check_data(cursor, "registry_action", regkey_info["action_type"], regkey_info["full_path"])
 
             if data_id is False:
-                data_id = insert_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
+                data_id = insert_data(db, cursor, "registry_action", regkey_info["action_type"],
+                                      regkey_info["full_path"])
 
-            insert_data("connection_type", "registry_action", file_id, data_id)
+            insert_data(db, cursor, "connection_type", "registry_action", file_id, data_id)
 
     # Insert readed registry
 
@@ -748,12 +752,13 @@ def add_report(file_path, file_name):
                 "full_path": str(regkey.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
+            data_id = check_data(cursor, "registry_action", regkey_info["action_type"], regkey_info["full_path"])
 
             if data_id is False:
-                data_id = insert_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
+                data_id = insert_data(db, cursor, "registry_action", regkey_info["action_type"],
+                                      regkey_info["full_path"])
 
-            insert_data("connection_type", "registry_action", file_id, data_id)
+            insert_data(db, cursor, "connection_type", "registry_action", file_id, data_id)
 
     print("%-30s" % print_string + "%s" % "Report added.")
 
@@ -764,13 +769,13 @@ def add_report(file_path, file_name):
 
 # Function to process report
 
-def check_report(file_path, file_name):
+def check_report(cursor, file_path, file_name):
     # file_path - path to file
     # file_name - name of file
     # Before function call MySQL connection must be created
     # Function return array with new data
 
-    virus_flag = False
+    virus_flag = "Clean"
     print_string = "check_report: "
     data = []
     virus_array = ""
@@ -791,7 +796,7 @@ def check_report(file_path, file_name):
         for scan in check_jdata["scans"]:
             if "detected" in check_jdata["scans"][scan]:
                 if check_jdata["scans"][scan]["detected"] is True:
-                    virus_flag = True
+                    virus_flag = "Malware"
                     if "result" in check_jdata["scans"][scan]:
                         virus_array = virus_array + check_jdata["scans"][scan]["result"] + ", "
 
@@ -805,9 +810,9 @@ def check_report(file_path, file_name):
                     "data_type": "File info",
                     "name": str(jdata["target"]["file"]["name"].encode("utf-8")),
                     "type": str(jdata["target"]["file"]["type"].encode("utf-8")),
-                    "size": str(jdata["target"]["file"]["size"]),
+                    "size": str(jdata["target"]["file"]["size"] * 1.0 / (1024 * 1024)) + "MB",
                     "md5":  str(jdata["target"]["file"]["md5"].encode("utf-8")),
-                    "flag_virustotal": virus_flag * 1,
+                    "flag_virustotal": virus_flag,
                     "virus_array": virus_array
                 }
 
@@ -835,14 +840,19 @@ def check_report(file_path, file_name):
 
     if "dns" in check_jdata:
         for dns in jdata["network"]["dns"]:
-            if "type" in dns and "request" in dns:
+            if "type" in dns and "request" in dns and "answers" in dns:
                 dns_info = {
                     "data_type":    "DNS connection",
                     "type":         str(dns["type"].encode("utf-8")),
-                    "request":      str(dns["request"].encode("utf-8"))
+                    "request":      str(dns["request"].encode("utf-8")),
+                    "answer":       ""
                 }
 
-                data_id = check_data("network_dns", dns_info["type"], dns_info["request"])
+                if len(dns["answers"]) > 0:
+                    if "data" in dns["answers"][0]:
+                        dns_info["answer"] = str(dns["answers"][0]["data"].encode("utf-8"))
+
+                data_id = check_data(cursor, "network_dns", dns_info["type"], dns_info["request"])
 
                 if data_id is False:
                     data.append(dns_info)
@@ -858,7 +868,7 @@ def check_report(file_path, file_name):
                     "host":         str(http["host"].encode("utf-8"))
                 }
 
-                data_id = check_data("network_http", http_info["url"], http_info["host"])
+                data_id = check_data(cursor, "network_http", http_info["url"], http_info["host"])
 
                 if data_id is False:
                     data.append(http_info)
@@ -874,7 +884,7 @@ def check_report(file_path, file_name):
                     "destination":  str(tcp["dst"].encode("utf-8"))
                 }
 
-                data_id = check_data("network_tcp", tcp_info["source"], tcp_info["destination"])
+                data_id = check_data(cursor, "network_tcp", tcp_info["source"], tcp_info["destination"])
 
                 if data_id is False:
                     data.append(tcp_info)
@@ -890,7 +900,7 @@ def check_report(file_path, file_name):
                     "destination":  str(udp["dst"].encode("utf-8"))
                 }
 
-                data_id = check_data("network_udp", udp_info["source"], udp_info["destination"])
+                data_id = check_data(cursor, "network_udp", udp_info["source"], udp_info["destination"])
 
                 if data_id is False:
                     data.append(udp_info)
@@ -912,7 +922,7 @@ def check_report(file_path, file_name):
                         "process_name": str(process["process_name"].encode("utf-8"))
                     }
 
-                    data_id = check_data("process", process_info["process_name"])
+                    data_id = check_data(cursor, "process", process_info["process_name"])
 
                     if data_id is False:
                         data.append(process_info)
@@ -938,7 +948,7 @@ def check_report(file_path, file_name):
                     "size":     str(file_temp["size"]),
                 }
 
-                data_id = check_data("file_dropped", file_info["path"], file_info["type"],
+                data_id = check_data(cursor, "file_dropped", file_info["path"], file_info["type"],
                                      file_info["process"], file_info["size"])
 
                 if data_id is False:
@@ -960,7 +970,7 @@ def check_report(file_path, file_name):
                 "full_path":    str(dll.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("dll", dll_info["full_path"])
+            data_id = check_data(cursor, "dll", dll_info["full_path"])
 
             if data_id is False:
                 data.append(dll_info)
@@ -974,7 +984,7 @@ def check_report(file_path, file_name):
                 "command":     str(command.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("command_line", command_info["command"])
+            data_id = check_data(cursor, "command_line", command_info["command"])
 
             if data_id is False:
                 data.append(command_info)
@@ -995,7 +1005,7 @@ def check_report(file_path, file_name):
                 "full_path":    str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
+            data_id = check_data(cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
             if data_id is False:
                 data.append(file_info)
@@ -1016,7 +1026,7 @@ def check_report(file_path, file_name):
                 "full_path":    str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
+            data_id = check_data(cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
             if data_id is False:
                 data.append(file_info)
@@ -1031,7 +1041,7 @@ def check_report(file_path, file_name):
                 "full_path":    str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
+            data_id = check_data(cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
             if data_id is False:
                 data.append(file_info)
@@ -1046,7 +1056,7 @@ def check_report(file_path, file_name):
                 "full_path":    str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
+            data_id = check_data(cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
             if data_id is False:
                 data.append(file_info)
@@ -1061,7 +1071,7 @@ def check_report(file_path, file_name):
                 "full_path":    str(file_temp.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("file_action", file_info["action_type"], file_info["full_path"])
+            data_id = check_data(cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
             if data_id is False:
                 data.append(file_info)
@@ -1076,7 +1086,7 @@ def check_report(file_path, file_name):
                 "full_path":    str(directory.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("folder_action", directory_info["action_type"], directory_info["full_path"])
+            data_id = check_data(cursor, "folder_action", directory_info["action_type"], directory_info["full_path"])
 
             if data_id is False:
                 data.append(directory_info)
@@ -1091,7 +1101,7 @@ def check_report(file_path, file_name):
                 "full_path":    str(directory.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("folder_action", directory_info["action_type"], directory_info["full_path"])
+            data_id = check_data(cursor, "folder_action", directory_info["action_type"], directory_info["full_path"])
 
             if data_id is False:
                 data.append(directory_info)
@@ -1106,7 +1116,7 @@ def check_report(file_path, file_name):
                 "full_path":    str(regkey.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
+            data_id = check_data(cursor, "registry_action", regkey_info["action_type"], regkey_info["full_path"])
 
             if data_id is False:
                 data.append(regkey_info)
@@ -1121,7 +1131,7 @@ def check_report(file_path, file_name):
                 "full_path":    str(regkey.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
+            data_id = check_data(cursor, "registry_action", regkey_info["action_type"], regkey_info["full_path"])
 
             if data_id is False:
                 data.append(regkey_info)
@@ -1136,7 +1146,7 @@ def check_report(file_path, file_name):
                 "full_path":    str(regkey.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
+            data_id = check_data(cursor, "registry_action", regkey_info["action_type"], regkey_info["full_path"])
 
             if data_id is False:
                 data.append(regkey_info)
@@ -1151,7 +1161,7 @@ def check_report(file_path, file_name):
                 "full_path":    str(regkey.encode("utf-8").replace("\\", "/").replace("'", "_"))
             }
 
-            data_id = check_data("registry_action", regkey_info["action_type"], regkey_info["full_path"])
+            data_id = check_data(cursor, "registry_action", regkey_info["action_type"], regkey_info["full_path"])
 
             if data_id is False:
                 data.append(regkey_info)
@@ -1161,7 +1171,7 @@ def check_report(file_path, file_name):
     for i in range(0, len(data)):
         print(print_string + data[i]["data_type"] + ": " + str(data[i]))
 
-    print("Total data: " + str(len(data)))
+    print("%-30s" % print_string + "Total data: " + str(len(data)))
 
     # Close JSON file
 
@@ -1174,7 +1184,7 @@ def check_report(file_path, file_name):
 
 # Function to clear database
 
-def clear_db():
+def clear_db(db, cursor):
     # Function delete all data from database
 
     print_string = "clear_db: "
@@ -1192,7 +1202,7 @@ def clear_db():
 
 # Function to count database length
 
-def length_db():
+def length_db(cursor):
     # Function return number of elements in database sorted by type of data
     # data[0] - number of connection data
     # data[1] - number of files in database
@@ -1203,7 +1213,7 @@ def length_db():
     # data[6] - number of DLL's in database
     # data[7] - number of command of command line in database
 
-    print_string = "size_db: "
+    print_string = "length_db: "
     data = [0, 0, 0, 0, 0, 0, 0, 0]
 
     for i in range(0, 13):
@@ -1233,85 +1243,64 @@ def length_db():
     return data
 
 
-# Function to check cuckoo status (Recognize cuckoo web interface too)
+# Function to check cuckoo status
 
 def cuckoo_status():
-    result = subprocess.call(["pgrep", "cuckoo"])
+    print_string = "cuckoo_status: "
 
-    if result is not 1:
+    result = subprocess.Popen(["pgrep", "-a", "cuckoo"], stdout=subprocess.PIPE)
+    stdout = result.communicate()
+
+    if stdout[0].find("cuckoo web") is not -1:
+        if len(stdout[0].split()) is 7:
+            print("%-30s" % print_string + "Cuckoo status: On")
+            return True
+        else:
+            print("%-30s" % print_string + "Cuckoo status: Off")
+            return False
+    elif stdout[0] != "":
+        print("%-30s" % print_string + "Cuckoo status: On")
         return True
     else:
+        print("%-30s" % print_string + "Cuckoo status: Off")
         return False
 
 
 # Function to check disk space
 
 def disk_space():
-    # result = subprocess.check_output(["du", "-shb", "/home/alex/.cuckoo"])
-    # result_pointer = result.find("	")
-    # disk_space_result = float(result[0:result_pointer])/1073741824
-
-    # print("Usage disk space: " + str(disk_space_result) + "G")
-
-    # return disk_space_result
+    print_string = "disk_space: "
 
     statvfs = os.statvfs("/home")
     free_space = (statvfs.f_frsize * statvfs.f_bavail * 1.0) / (1024 * 1024 * 1024)
 
-    '''
-    result = subprocess.check_output(["df", "-h", "/home"]).split('\n')[1].split(' ')
-    result = filter(None, result)[3]
-    scale = result[len(result)-1]
-
-    if scale == "G":
-        free_space = float(result[0:len(result)-1])
-    elif scale == "M":
-        free_space = float(result[0:len(result)-1])/1024
-    elif scale == "K":
-        free_space = float(result[0:len(result)-1])/(1024 * 1024)
-    else:
-        free_space = 0
-    '''
-
-    print("Usage disk space: %.2f" % free_space + "G")
+    print("%-30s" % print_string + "Usage disk space: %.2f" % free_space + "G")
 
     return free_space
-
-
-# Function to create VBS file
-
-def create_vbs(uploaded_file_name):
-    vbs_code = "Dim objShell\n"\
-               + "Set objShell = WScript.CreateObject(\"WScript.Shell\")\n" \
-               + "objShell.Run \"cmd /c copy \\\\VBOXSVR\uploads\\" + uploaded_file_name \
-               + " C:\Users\\alex\Desktop\\" + uploaded_file_name + "\"\n" \
-               + "WScript.Sleep 1000\n" \
-               + "objShell.Run \"cmd /c start C:\Users\\alex\Desktop\\" + uploaded_file_name + "\""
-
-    vbs_file_name = "uploads/file_" + str(random.randint(1, 100000)) + "_.vbs"
-    vbs_file = open(vbs_file_name, "w")
-    vbs_file.write(vbs_code)
-    vbs_file.close()
-
-    return vbs_file_name
 
 
 # Function to delete memory dump if exist (Tested with build-in strings)
 
 def delete_memory_dump(report_id):
+    print_string = "delete_memory_dump: "
+
     result = subprocess.check_output(["ls", PATH_ANALYSES + str(report_id)])
-    result_flag = result.find(str("memory.dmp"))
+    result_flag = result.find("memory.dmp")
 
     if result_flag is not -1:
         subprocess.call(["rm", PATH_ANALYSES + str(report_id) + "/memory.dmp"])
-        print("Dump file deleted.")
+        print("%-30s" % print_string + "Dump file deleted.")
+    else:
+        print("%-30s" % print_string + "Dump file not exist.")
 
 
 # Function to change or return statistical data
 
-def statistic_data(function_type, scan_time=0):
+def statistic_data(db, cursor, function_type, scan_time=0):
     # function_type == True - Add scanned file and change average scan time
     # function_type == False - Return number of scans and average scan time
+
+    print_string = "statistic_data: "
 
     if function_type is True:
         query = "SELECT * FROM statistic LIMIT 1"
@@ -1327,6 +1316,8 @@ def statistic_data(function_type, scan_time=0):
         cursor.execute(add_string, data)
         db.commit()
 
+        print("%-30s" % print_string + "Scans: %d" % scans + ", Average time scan: %d" % average_scan_time + "sec")
+
         return scans, average_scan_time
 
     elif function_type is False:
@@ -1334,26 +1325,29 @@ def statistic_data(function_type, scan_time=0):
         cursor.execute(query)
         item = cursor.fetchone()
 
+        print("%-30s" % print_string + "Scans: %d" % item[0] + ", Average time scan: %d" % item[1] + "sec")
+
         return item[0], item[1]
 
 
 # Function to reset statistical data
 
-def statistic_reset():
+def statistic_reset(db, cursor):
+    print_string = "statistic_reset: "
+
     add_string = "UPDATE statistic SET scans = %s, average_scan_time = %s"
     data = (0, 0.0)
 
     cursor.execute(add_string, data)
     db.commit()
 
-    print("Statistical data reseted.")
+    print("%-30s" % print_string + "Statistical data reseted.")
 
 
 # Function to return database size
 
-def size_db():
-    # query = "SELECT table_schema AS 'Database', SUM(data_length + index_length) \
-    #  / 1024 / 1024 AS 'Size (MB)' FROM information_schema.TABLES GROUP BY table_schema LIMIT 1"
+def size_db(cursor):
+    print_string = "size_db: "
 
     query = "SELECT table_schema AS 'Database', SUM(data_length + index_length) \
      / 1024 / 1024 AS 'Size (MB)' FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'cuckoo'"
@@ -1361,7 +1355,24 @@ def size_db():
     cursor.execute(query)
     item = cursor.fetchone()
 
+    print("%-30s" % print_string + "Database size: %.2f" % item[1] + "MB")
+
     return item[1]
+
+
+# Function to add set of reports to database
+
+def learn_set(db, cursor, folder_path):
+    print_string = "learn_set: "
+
+    result = subprocess.check_output(["ls", folder_path]).split('\n')
+    result = result[0:len(result)-1]
+
+    for file_name in result:
+        if file_name.find(".json") is not -1:
+            add_report(db, cursor, folder_path, file_name)
+
+    print("%-30s" % print_string + "All reports added to data base.")
 
 
 # __ db - statistical info, correct all types
@@ -1372,13 +1383,18 @@ def size_db():
 # check data to request with maximal size (200-500)
 # html report
 # test working, max time waiting between upload to request for correct work
-# css, html - no clear id, classes and some code
 # __ add files to db script
 # __ open json with hebrew/russian symbols error
 # __ virustotal check and correct file info
-# constants
+# __ constants
 # __ learning set
 # __ virustotal flag + virus name
-# two js scripts
+# __ two js scripts
 # whois for http, udp, tcp
-# name file with code and file names with non-english language
+# __name file with code and file names with non-english language
+# __ correct code line length
+# __memory dump options
+
+# css, html - no clear id, classes and some code
+# function to check lot of files
+# instruction in html files
