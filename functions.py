@@ -5,6 +5,21 @@ import subprocess
 import mysql.connector
 from mysql.connector import errorcode
 import random
+import os
+
+# Dependences
+# Linux tool "pgrep" in function cuckoo_status()
+
+# Constants
+
+MYSQL_USER = "cuckoo"
+MYSQL_PASSWORD = "ac9100my"
+MYSQL_HOST = "localhost"
+MYSQL_DATABASE = "cuckoo"
+MYSQL_TABLES = ["connection_type", "file", "file_action", "file_dropped", "folder_action", "network_dns",
+                "network_http", "network_tcp", "network_udp", "process", "registry_action", "dll", "command_line"]
+PATH_ANALYSES = "/home/alex/.cuckoo/storage/analyses/"
+PATH_STANDART_SET = "/home/alex/PycharmProjects/Cuckoo/white_list_set/"
 
 
 # Functions
@@ -58,10 +73,10 @@ def mysql_create_connection():
     # Else error exit
 
     mysql_parameters = {
-        "user":     "cuckoo",
-        "password": "ac9100my",
-        "host":     "localhost",
-        "database": "cuckoo",
+        "user":     MYSQL_USER,
+        "password": MYSQL_PASSWORD,
+        "host":     MYSQL_HOST,
+        "database": MYSQL_DATABASE,
         "raise_on_warnings": True
     }
 
@@ -320,14 +335,17 @@ def check_data(data_type, data1, data2="", data3="", data4="", data5=""):
 
         if data_ready_flag:
             cursor.execute(query)
-            item = cursor.fetchone()
+            data_id = cursor.fetchone()
 
-            print("%-30s" % print_string + "%s" % "Data selected.")
+            # print("%-30s" % print_string + "%s" % "Data selected." + str(type(item[0])))
 
-            try:
-                return item[0]
-            except TypeError:
+            if data_id is None:
+                print("%-30s" % print_string + "%s" % "Data checked." + " Data no exist.")
                 return False
+            else:
+                print("%-30s" % print_string + "%s" % "Data checked." + " ID: " + str(data_id[0]) + " (" +
+                      data_type + ")")
+                return data_id[0]
         else:
             return False
 
@@ -371,10 +389,10 @@ def add_report(file_path, file_name):
             if "name" in jdata["target"]["file"] and "size" in jdata["target"]["file"] and "md5" in\
                     jdata["target"]["file"]:
                 file_info = {
-                    "name": str(jdata["target"]["file"]["name"]),
-                    "type": str(jdata["info"]["package"]),
+                    "name": str(jdata["target"]["file"]["name"].encode("utf-8")),
+                    "type": str(jdata["target"]["file"]["type"].encode("utf-8")),
                     "size": str(jdata["target"]["file"]["size"]),
-                    "md5":  str(jdata["target"]["file"]["md5"]),
+                    "md5":  str(jdata["target"]["file"]["md5"].encode("utf-8")),
                     "flag_virustotal": virus_flag * 1
                 }
 
@@ -785,10 +803,10 @@ def check_report(file_path, file_name):
                     jdata["target"]["file"]:
                 file_info = {
                     "data_type": "File info",
-                    "name": str(jdata["target"]["file"]["name"]),
-                    "type": str(jdata["info"]["package"]),
+                    "name": str(jdata["target"]["file"]["name"].encode("utf-8")),
+                    "type": str(jdata["target"]["file"]["type"].encode("utf-8")),
                     "size": str(jdata["target"]["file"]["size"]),
-                    "md5":  str(jdata["target"]["file"]["md5"]),
+                    "md5":  str(jdata["target"]["file"]["md5"].encode("utf-8")),
                     "flag_virustotal": virus_flag * 1,
                     "virus_array": virus_array
                 }
@@ -1160,14 +1178,12 @@ def clear_db():
     # Function delete all data from database
 
     print_string = "clear_db: "
-    tables = ["connection_type", "file", "file_action", "file_dropped", "folder_action", "network_dns",
-              "network_http", "network_tcp", "network_udp", "process", "registry_action", "dll", "command_line"]
 
     for i in range(0, 13):
-        add_string = "DELETE FROM " + tables[i] + ""  # ; ALTER TABLE `" + tables[i] + "` AUTO_INCREMENT=1;
+        add_string = "DELETE FROM " + MYSQL_TABLES[i] + ""
         cursor.execute(add_string)
         db.commit()
-        add_string = "ALTER TABLE " + tables[i] + " AUTO_INCREMENT=1"
+        add_string = "ALTER TABLE " + MYSQL_TABLES[i] + " AUTO_INCREMENT=1"
         cursor.execute(add_string)
         db.commit()
 
@@ -1188,12 +1204,10 @@ def length_db():
     # data[7] - number of command of command line in database
 
     print_string = "size_db: "
-    tables = ["connection_type", "file", "file_action", "file_dropped", "folder_action", "network_dns",
-              "network_http", "network_tcp", "network_udp", "process", "registry_action", "dll", "command_line"]
     data = [0, 0, 0, 0, 0, 0, 0, 0]
 
     for i in range(0, 13):
-        add_string = "SELECT COUNT(*) FROM " + tables[i]
+        add_string = "SELECT COUNT(*) FROM " + MYSQL_TABLES[i]
         cursor.execute(add_string)
         item = cursor.fetchone()
 
@@ -1225,9 +1239,9 @@ def cuckoo_status():
     result = subprocess.call(["pgrep", "cuckoo"])
 
     if result is not 1:
-        return 1
+        return True
     else:
-        return 0
+        return False
 
 
 # Function to check disk space
@@ -1241,22 +1255,27 @@ def disk_space():
 
     # return disk_space_result
 
+    statvfs = os.statvfs("/home")
+    free_space = (statvfs.f_frsize * statvfs.f_bavail * 1.0) / (1024 * 1024 * 1024)
+
+    '''
     result = subprocess.check_output(["df", "-h", "/home"]).split('\n')[1].split(' ')
     result = filter(None, result)[3]
     scale = result[len(result)-1]
 
     if scale == "G":
-        disk_space_result = float(result[0:len(result)-1])
+        free_space = float(result[0:len(result)-1])
     elif scale == "M":
-        disk_space_result = float(result[0:len(result)-1])/1024
+        free_space = float(result[0:len(result)-1])/1024
     elif scale == "K":
-        disk_space_result = float(result[0:len(result)-1])/(1024 * 1024)
+        free_space = float(result[0:len(result)-1])/(1024 * 1024)
     else:
-        disk_space_result = 0
+        free_space = 0
+    '''
 
-    print("Usage disk space: " + str(disk_space_result) + "G")
+    print("Usage disk space: %.2f" % free_space + "G")
 
-    return disk_space_result
+    return free_space
 
 
 # Function to create VBS file
@@ -1280,19 +1299,20 @@ def create_vbs(uploaded_file_name):
 # Function to delete memory dump if exist (Tested with build-in strings)
 
 def delete_memory_dump(report_id):
-    result = subprocess.check_output(["ls", "/home/alex/.cuckoo/storage/analyses/" + str(report_id)])
+    result = subprocess.check_output(["ls", PATH_ANALYSES + str(report_id)])
     result_flag = result.find(str("memory.dmp"))
 
     if result_flag is not -1:
-        subprocess.call(["rm", "/home/alex/.cuckoo/storage/analyses/" + str(report_id) + "/memory.dmp"])
+        subprocess.call(["rm", PATH_ANALYSES + str(report_id) + "/memory.dmp"])
         print("Dump file deleted.")
 
 
 # Function to change or return statistical data
 
-def statistic_change(function_type, scan_time=0):
+def statistic_data(function_type, scan_time=0):
     # function_type == True - Add scanned file and change average scan time
     # function_type == False - Return number of scans and average scan time
+
     if function_type is True:
         query = "SELECT * FROM statistic LIMIT 1"
         cursor.execute(query)
@@ -1306,6 +1326,8 @@ def statistic_change(function_type, scan_time=0):
 
         cursor.execute(add_string, data)
         db.commit()
+
+        return scans, average_scan_time
 
     elif function_type is False:
         query = "SELECT * FROM statistic LIMIT 1"
@@ -1345,7 +1367,7 @@ def size_db():
 # __ db - statistical info, correct all types
 # __ check_report - file information, some types unchecked
 # __ add_report - file information, types unchecked, not uncodered lines
-# check file type at upload
+# ?? check file type at upload
 # __ delete dump at final of scanning
 # check data to request with maximal size (200-500)
 # html report
@@ -1353,8 +1375,10 @@ def size_db():
 # css, html - no clear id, classes and some code
 # __ add files to db script
 # __ open json with hebrew/russian symbols error
-# virustotal check and correct file info
+# __ virustotal check and correct file info
 # constants
 # __ learning set
 # __ virustotal flag + virus name
 # two js scripts
+# whois for http, udp, tcp
+# name file with code and file names with non-english language

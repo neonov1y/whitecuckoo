@@ -12,7 +12,7 @@ virus_flag = False
 
 cursor = functions.mysql_create_connection()
 
-# functions.disk_space()
+functions.disk_space()
 # functions.size_db()
 # functions.statistic_reset()
 # functions.statistic_change(True, 5)
@@ -31,7 +31,7 @@ cursor = functions.mysql_create_connection()
 
 # for i in range(reports_ids[0], reports_ids[1]):
 #    functions.add_report("reports/", "report" + str(i) + ".json")
-functions.check_report("/home/alex/.cuckoo/storage/analyses/15/reports/", "report.json")
+# data = functions.check_report("/home/alex/.cuckoo/storage/analyses/15/reports/", "report.json")
 
 # functions.disk_space()
 

@@ -43,7 +43,7 @@ function instruction(property) {
 	}
 }
 
-function upload_process(server_function) {
+function request_process(server_function) {
 	if (server_function == "file_check" || server_function == "file_add") var file = document.getElementById("uploadFile").files[0];
 	else var file = {"size": 0}
 

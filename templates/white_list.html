@@ -56,20 +56,20 @@
 					<div id="uploadProperties">
                 		<p>
                             Delete all data from the white-list:
-                            <a class="uploadLink" onclick="upload_process('clear_list')">Clear</a>
+                            <a class="uploadLink" onclick="request_process('clear_list')">Clear</a>
                             <br />
                             Learn standart reports set:
-                            <a class="uploadLink" onclick="upload_process('learn_set')">Learn</a>
+                            <a class="uploadLink" onclick="request_process('learn_set')">Learn</a>
                             <br />
                             Reset statistical data:
-                            <a class="uploadLink" onclick="upload_process('statistic_reset')">Reset</a>
+                            <a class="uploadLink" onclick="request_process('statistic_reset')">Reset</a>
                         </p>
 
                 		<p class="center">Choise file to creat report and add to white-list: </p>
 
                 		<label class="uploadContainer">
                 			Upload & Add
-                			<input type="file" id="uploadFile" onchange="upload_process('file_add')" formenctype="multipart/form-data" />
+                			<input type="file" id="uploadFile" onchange="request_process('file_add')" formenctype="multipart/form-data" />
                 		</label>
 					</div>
 
@@ -84,10 +84,10 @@
 				<h3>Statistic</h3>
 
 				<p>
-					{% if cuckoo_status == 0 %}
-						Cuckoo status: <font color="red">Stopped</font><br />
-					{% else %}
+					{% if cuckoo_status == True %}
 						Cuckoo status: <font color="green">Available</font><br />
+					{% else %}
+						Cuckoo status: <font color="red">Stopped</font><br />
 					{% endif %}
 
 					White-list files: {{ files_number }} <br />

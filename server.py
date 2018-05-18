@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from werkzeug import secure_filename
+# from werkzeug import secure_filename
 import json
 import subprocess
 import time
@@ -32,7 +32,7 @@ def admin_list():
     data = functions.length_db()
     size_db = "%.2f" % functions.size_db()
     cuckoo_status = functions.cuckoo_status()
-    scans, average_scan_time = functions.statistic_change(False)
+    scans, average_scan_time = functions.statistic_data(False)
     average_scan_time = "%.2f" % average_scan_time
 
     # Close MySQL connection
@@ -67,7 +67,7 @@ def upload_process():
         # Save the uploaded file in the directory to uploads
         path = "uploads/"
         f = request.files["file"]
-        uploaded_file_name = str(random.randint(1, 100000)) + "_" + secure_filename(f.filename)
+        uploaded_file_name = str(random.randint(1, 100000)) + "_" + f.filename
         f.save(path + uploaded_file_name)
 
         # Run Cuckoo
@@ -82,13 +82,13 @@ def upload_process():
         time.sleep(15)
 
         while 1:
-            result = subprocess.check_output(["ls", "/home/alex/.cuckoo/storage/analyses"])
+            result = subprocess.check_output(["ls", functions.PATH_ANALYSES])
             report_flag = result.find(str(report_id))
             if report_flag is not -1:
-                result = subprocess.check_output(["ls", "/home/alex/.cuckoo/storage/analyses/" + report_id])
+                result = subprocess.check_output(["ls", functions.PATH_ANALYSES + report_id])
                 report_flag = result.find("reports")
                 if report_flag is not -1:
-                    result = subprocess.check_output(["ls", "/home/alex/.cuckoo/storage/analyses/" + report_id + "/reports/"])
+                    result = subprocess.check_output(["ls", functions.PATH_ANALYSES + report_id + "/reports/"])
                     report_flag = result.find("report.json")
                     if report_flag is not -1:
                         break
@@ -104,11 +104,11 @@ def upload_process():
         functions.mysql_create_connection()
 
         # Check/Add the uploaded report
-        file_path = "/home/alex/.cuckoo/storage/analyses/" + str(report_id) + "/reports/"
+        file_path = functions.PATH_ANALYSES + str(report_id) + "/reports/"
 
         if function_type == "file_check":
             data = functions.check_report(file_path, "report.json")
-            functions.statistic_change(True, time.time() - start_t)
+            functions.statistic_data(True, time.time() - start_t)
 
         elif function_type == "file_add":
             functions.add_report(file_path, "report.json")
@@ -141,7 +141,7 @@ def upload_process():
         functions.mysql_create_connection()
 
         # Learn set
-        file_path = "/home/alex/PycharmProjects/Cuckoo/white_list_set/"
+        file_path = functions.PATH_STANDART_SET
         result = subprocess.check_output(["ls", file_path]).split('\n')
         result = result[0:len(result)-1]
 

@@ -36,7 +36,7 @@
 
                 <div align="center">
 					<div id="uploadProperties">
-						{% if cuckoo_status == 1 %}
+						{% if cuckoo_status == True %}
 							<p class="center">Choise file to scan: </p>
 
 							<div class="propertiesContainer">
@@ -53,7 +53,7 @@
 
 							<label id="uploadContainer">
 								Upload & Scan
-								<input type="file" id="uploadFile" onchange="upload_process('file_check')" formenctype="multipart/form-data" />
+								<input type="file" id="uploadFile" onchange="request_process('file_check')" formenctype="multipart/form-data" />
 							</label>
 						{% else %}
 							<p class="center">Sorry, Cuckoo Sandbox not available now to scan files. </p>
