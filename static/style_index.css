@@ -50,14 +50,14 @@
         /* opacity: 0; */
     }
     to {
-    	height: 250px;
+    	height: 550px;
         /* opacity: 1; */
     }
 }
 
 @keyframes hideInst {
     from {
-    	height: 250px;
+    	height: 550px;
         /* opacity: 1; */
     }
     to {
@@ -95,11 +95,11 @@ p {
 }
 
 ::-moz-selection {
-	background-color: #C0C096;
+	background-color: #D6CFA2;
 }
 
 ::selection {
-	background-color: #C0C096;
+	background-color: #D6CFA2;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -120,7 +120,16 @@ h3 {
 	border-bottom-color: black;
 	border-bottom-style: solid;
 }
-
+/*
+mark {
+	color: black;
+	background-color: #F9966B;
+}
+*/
+.markSus {
+	color: unset;
+	background-color: unset;
+}
 /* Header */
 
 header {
@@ -286,6 +295,33 @@ article {
 	text-align: center;
 	text-transform: uppercase;
 	display: none;
+}
+
+.resultButton {
+    color: black;
+    padding: 5px;
+    padding-left: 25px;
+    padding-right: 25px;
+	margin-bottom: 15px;
+	text-align: center;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;
+	text-transform: uppercase;
+	text-decoration: none;
+	transition: 0.2s;
+	cursor: pointer;
+	display: none;
+	border: 1px;
+	border-style: solid;
+	border-color: #333333;
+}
+
+.resultButton:hover {
+	color: #666666;
+	border-color: #666666;
+    padding-left: 20px;
+    padding-right: 20px;
+
 }
 
 .messageContainer {

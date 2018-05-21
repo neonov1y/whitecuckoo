@@ -4,6 +4,7 @@
 		<title>Dashboard</title>
 		<meta charset="UTF-8" />
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_index.css') }}" />
+		<style id="marker"></style>
 	</head>
 
 	<body>
@@ -29,10 +30,22 @@
                 System oriented on tree main types PDF, DOC, DOCX.<br /><br />
                 <b>Maximal size</b><br />
                 Maximal available size of file is 20MB.<br /><br />
-                <b>Scan data</b><br />
+                <b>Report data</b><br />
                 Data which you will see in the report:<br />
-                - Data about file: name, type, size, MD5, result of anti viruses scan<br />
-                - Data about file: name, type, size, MD5, result of anti viruses scan<br />
+				- Information about file: name, type, size, MD5, result of anti-viruses scan<br />
+				- Network activity: DNS, HTTP, TCP, UDP<br />
+				- Loaded DLL's<br />
+				- Commands performed from command line<br />
+				- Processes<br />
+				- Files activity: created, deleted, copied, opened and written files<br />
+				- Folders activity: created and deleted folders<br />
+				- Registry activity: readed, deleted, opened and written files<br /><br />
+                <b>Scan time</b><br />
+				Time typical for file scan is in range 30 second - few minutes.<br /><br />
+                <b>Memory dump</b><br />
+				Memory dump is optional function, its take a little more time, but in this case report include
+				runned processes.<br />
+
             </p>
         </div>
 
@@ -65,6 +78,9 @@
 						{% else %}
 							<p class="center">Sorry, Cuckoo Sandbox not available now to scan files. </p>
 						{% endif %}
+							<br />
+							<a class="resultButton" id="generateReportButton" onclick="generate_report()">Generate report file</a>
+							<a class="resultButton" id="markWordList" onclick="set_marker_color()">Mark suspicious words</a>
 					</div>
 
 					<div id="loaderSpinner" align="center"></div>

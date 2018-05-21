@@ -62,7 +62,7 @@ function request_process() {
 						str_data = "Name: " + object[i].process_name;
 						break;
 					case "DLL loaded":
-						str_data = "Name: " + object[i].full_path;
+						str_data = "Name: " + mark_word_list(object[i].full_path);
 						break;
 					case "Command line":
 						str_data = "Command: " + object[i].command;
@@ -93,16 +93,16 @@ function request_process() {
 						str_data = "Folder path: " + object[i].full_path;
 						break;
 					case "Opened registry":
-						str_data = "Registry path: " + object[i].full_path;
+						str_data = "Registry path: " + mark_word_list(object[i].full_path);
 						break;
 					case "Readed registry":
-						str_data = "Registry path: " + object[i].full_path;
+						str_data = "Registry path: " + mark_word_list(object[i].full_path);
 						break;
 					case "Written registry":
-						str_data = "Registry path: " + object[i].full_path;
+						str_data = "Registry path: " + mark_word_list(object[i].full_path);
 						break;
 					case "Deleted registry":
-						str_data = "Registry path: " + object[i].full_path;
+						str_data = "Registry path: " + mark_word_list(object[i].full_path);
 						break;
 				}
 
@@ -140,11 +140,14 @@ function loading(switch_var) {
 			document.getElementById("uploadProperties").style.display = "none";
 			document.getElementById("loaderSpinner").style.display = "block";
 			document.getElementById("loaderText").style.display = "block";
+			document.getElementById("marker").innerHTML = "";
 			break;
 		case 0:
 			document.getElementById("uploadProperties").style.display = "block";
 			document.getElementById("loaderSpinner").style.display = "none";
 			document.getElementById("loaderText").style.display = "none";
+			document.getElementById("generateReportButton").style.display = "inline-block";
+			document.getElementById("markWordList").style.display = "inline-block";
 			break;
 	}
 }
@@ -216,4 +219,125 @@ function add_message_block(str_type, str_data) {
 				<p class='messageData' style='color: " + str_color + "'>" + str_data + "</p>\
 			</div>\
 		</div>";
+}
+
+function generate_report() {
+	var initial_code = "\
+		<!DOCTYPE html>\
+		<html lang='en'>\
+			<head>\
+				<title>Report</title>\
+				<meta charset='UTF-8' />\
+				<style>\
+					@import url('https://fonts.googleapis.com/css?family=Open+Sans');\
+					\
+					.messageContainer {\
+						display: block;\
+						margin-top: 5px;\
+						padding: 4px;\
+					    padding-left: 15px;\
+					    padding-right: 15px;\
+						border: 1px;\
+						border-style: solid;\
+						border-color: #444444;\
+					}\
+					\
+					.messageContainer:hover {\
+						background-color: #E7E6E1;\
+					}\
+					\
+					.typeContainer {\
+						width: 20%;\
+						max-width: 120px;\
+						display: inline-block;\
+						vertical-align: top;\
+					}\
+					\
+					.dataContainer {\
+						width: 75%;\
+						display: inline-block;\
+						vertical-align: top;\
+					}\
+					\
+					.messageType {\
+						color: #393232;\
+						display: inline;\
+						font-family: 'Open Sans', sans-serif;\
+						font-size: 13px;\
+						font-weight: bold;\
+						margin-right: 10px;\
+						word-wrap: break-word;\
+					}\
+					\
+					.messageData {\
+						color: #444444;\
+						display: inline;\
+						font-family: 'Open Sans', sans-serif;\
+						font-size: 12px;\
+						word-wrap: break-word;\
+					}\
+					\
+					.markSus {\
+						color: unset;\
+						background-color: unset;\
+					}\
+					\
+					" + document.getElementById("marker").innerHTML + "\
+				</style>\
+			</head>\
+			<body>"
+
+    var pom = document.createElement('a');
+    pom.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(initial_code) + 
+    	encodeURIComponent(document.getElementById("uploadBlock").innerHTML) + "</body></html>");
+    pom.setAttribute("download", "report.html");
+
+    if (document.createEvent) {
+        var event = document.createEvent("MouseEvents");
+        event.initEvent("click", true, true);
+        pom.dispatchEvent(event);
+    }
+    else {
+        pom.click();
+    }
+}
+
+function mark_word_list(str) {
+	var word_list = ["dns", "tcp", "http", "udp", "root", "crypt", "cryptography", "browser", "firefox", "chrome", "opera", "safari", "iexplore", "autorun", "password"];
+	var temp1 = 0, temp2, temp3, temp4, temp5, temp6, stat1, result;
+	result = str
+
+	for (var i = word_list.length - 1; i >= 0; i--) {
+		stat1 = RegExp(word_list[i], "i");
+		temp1 = result.search(stat1);
+
+		while(temp1 != -1) {
+			temp2 = result.slice(temp1, result.length);
+			temp4 = mark_word_list_one(temp2, word_list[i]);
+			temp3 = result.slice(0, temp1);
+			result = temp3 + temp4;
+			temp5 = result.slice(temp1 + 22 + word_list[i].length + 7, result.length);
+			temp6 = temp1;
+			temp1 = temp5.search(stat1);
+			if(temp1 != -1) temp1 = temp1 + temp6 + 22 + word_list[i].length + 7;
+			if(temp1 > 2000) break;
+		}
+	}
+	return result
+}
+	
+
+function mark_word_list_one(str, word) {
+	var temp1 = 0, temp2, stat1;
+
+	stat1 = RegExp(word, "i");
+	temp1 = str.search(stat1);
+	temp2 = str.slice(temp1, temp1 + word.length);
+	str = str.replace(stat1, "<mark class='markSus'>" + temp2 + "</mark>");
+
+	return str
+}
+
+function set_marker_color() {
+	document.getElementById("marker").innerHTML = ".markSus {background-color: #FFFF00; color: black;}"
 }

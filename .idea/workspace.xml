@@ -2,58 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8818235d-51d2-420e-8289-adf2f5e6a045" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/functions.py" afterPath="$PROJECT_DIR$/functions.py" />
-      <change beforePath="$PROJECT_DIR$/server.py" afterPath="$PROJECT_DIR$/server.py" />
-      <change beforePath="$PROJECT_DIR$/static/scriptAjax.js" afterPath="$PROJECT_DIR$/static/scriptAjax.js" />
-      <change beforePath="$PROJECT_DIR$/static/style_admin.css" afterPath="$PROJECT_DIR$/static/style_admin.css" />
+      <change beforePath="$PROJECT_DIR$/static/images/archive.jpeg" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/static/scriptAjaxIndex.js" afterPath="$PROJECT_DIR$/static/scriptAjaxIndex.js" />
       <change beforePath="$PROJECT_DIR$/static/style_index.css" afterPath="$PROJECT_DIR$/static/style_index.css" />
       <change beforePath="$PROJECT_DIR$/templates/index.html" afterPath="$PROJECT_DIR$/templates/index.html" />
-      <change beforePath="$PROJECT_DIR$/templates/white_list.html" afterPath="$PROJECT_DIR$/templates/white_list.html" />
-      <change beforePath="$PROJECT_DIR$/testfile.py" afterPath="$PROJECT_DIR$/testfile.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/Jinja2-2.10.dist-info/DESCRIPTION.rst" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/Jinja2-2.10.dist-info/INSTALLER" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/Jinja2-2.10.dist-info/LICENSE.txt" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/Jinja2-2.10.dist-info/METADATA" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/Jinja2-2.10.dist-info/RECORD" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/Jinja2-2.10.dist-info/WHEEL" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/Jinja2-2.10.dist-info/entry_points.txt" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/Jinja2-2.10.dist-info/metadata.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/Jinja2-2.10.dist-info/top_level.txt" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click-6.7.dist-info/DESCRIPTION.rst" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click-6.7.dist-info/INSTALLER" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click-6.7.dist-info/METADATA" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click-6.7.dist-info/RECORD" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click-6.7.dist-info/WHEEL" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click-6.7.dist-info/metadata.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click-6.7.dist-info/top_level.txt" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click/__init__.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click/__init__.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click/_bashcomplete.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click/_bashcomplete.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click/_compat.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click/_compat.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click/_termui_impl.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click/_termui_impl.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click/_unicodefun.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click/_unicodefun.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click/core.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click/core.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click/testing.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/click/testing.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/__init__.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/__init__.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/_identifier.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/asyncsupport.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/asyncsupport.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/bccache.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/bccache.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/compiler.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/compiler.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/debug.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/debug.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/defaults.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/defaults.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/environment.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/environment.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/ext.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/ext.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/filters.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/filters.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/idtracking.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/idtracking.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/lexer.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/lexer.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/nativetypes.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/nodes.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/nodes.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/parser.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/parser.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/runtime.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/runtime.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/sandbox.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/sandbox.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/tests.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/tests.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/utils.py" afterPath="$PROJECT_DIR$/venv1/lib/python2.7/site-packages/jinja2/utils.py" />
-      <change beforePath="$PROJECT_DIR$/venv1/pip-selfcheck.json" afterPath="$PROJECT_DIR$/venv1/pip-selfcheck.json" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -64,10 +18,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="functions.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="functions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="147">
+            <state relative-caret-position="-468">
               <caret line="1004" column="34" lean-forward="false" selection-start-line="1004" selection-start-column="34" selection-end-line="1004" selection-end-column="34" />
               <folding>
                 <element signature="e#11#22#0" expanded="true" />
@@ -91,7 +45,7 @@
       <file leaf-file-name="server.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
+            <state relative-caret-position="870">
               <caret line="55" column="68" lean-forward="false" selection-start-line="55" selection-start-column="68" selection-end-line="55" selection-end-column="68" />
               <folding>
                 <element signature="e#11#60#0" expanded="true" />
@@ -100,11 +54,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="296">
-              <caret line="34" column="91" lean-forward="false" selection-start-line="34" selection-start-column="91" selection-end-line="34" selection-end-column="91" />
+            <state relative-caret-position="375">
+              <caret line="97" column="0" lean-forward="true" selection-start-line="97" selection-start-column="0" selection-end-line="97" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -113,7 +67,7 @@
       <file leaf-file-name="white_list.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/white_list.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
+            <state relative-caret-position="2214">
               <caret line="123" column="90" lean-forward="false" selection-start-line="123" selection-start-column="90" selection-end-line="123" selection-end-column="90" />
               <folding />
             </state>
@@ -150,15 +104,15 @@
         <option value="$PROJECT_DIR$/testfile.py" />
         <option value="$PROJECT_DIR$/server.py" />
         <option value="$PROJECT_DIR$/templates/white_list.html" />
-        <option value="$PROJECT_DIR$/templates/index.html" />
         <option value="$PROJECT_DIR$/functions.py" />
+        <option value="$PROJECT_DIR$/templates/index.html" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="4">
-    <option name="x" value="191" />
+  <component name="ProjectFrameBounds" extendedState="5">
+    <option name="x" value="192" />
     <option name="y" value="24" />
-    <option name="width" value="1663" />
+    <option name="width" value="1662" />
     <option name="height" value="1056" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -241,7 +195,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.testfile">
+  <component name="RunManager" selected="Python.server">
     <configuration name="flask" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -356,12 +310,13 @@
     <configuration />
   </component>
   <component name="ToolWindowManager">
-    <frame x="191" y="24" width="1663" height="1056" extended-state="4" />
+    <frame x="192" y="24" width="1662" height="1056" extended-state="5" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14634146" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14582062" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296146" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41422594" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.333682" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -547,23 +502,25 @@
     <entry file="file://$PROJECT_DIR$/static/style.css" />
     <entry file="file://$PROJECT_DIR$/templates/white_list.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
+        <state relative-caret-position="2214">
           <caret line="123" column="90" lean-forward="false" selection-start-line="123" selection-start-column="90" selection-end-line="123" selection-end-column="90" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/index.html">
+    <entry file="file://$PROJECT_DIR$/functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="34" column="91" lean-forward="false" selection-start-line="34" selection-start-column="91" selection-end-line="34" selection-end-column="91" />
-          <folding />
+        <state relative-caret-position="-468">
+          <caret line="1004" column="34" lean-forward="false" selection-start-line="1004" selection-start-column="34" selection-end-line="1004" selection-end-column="34" />
+          <folding>
+            <element signature="e#11#22#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
+        <state relative-caret-position="870">
           <caret line="55" column="68" lean-forward="false" selection-start-line="55" selection-start-column="68" selection-end-line="55" selection-end-column="68" />
           <folding>
             <element signature="e#11#60#0" expanded="true" />
@@ -581,13 +538,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/functions.py">
+    <entry file="file://$PROJECT_DIR$/templates/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="1004" column="34" lean-forward="false" selection-start-line="1004" selection-start-column="34" selection-end-line="1004" selection-end-column="34" />
-          <folding>
-            <element signature="e#11#22#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="375">
+          <caret line="97" column="0" lean-forward="true" selection-start-line="97" selection-start-column="0" selection-end-line="97" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
