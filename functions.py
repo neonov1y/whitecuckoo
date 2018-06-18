@@ -1373,28 +1373,3 @@ def learn_set(db, cursor, folder_path):
             add_report(db, cursor, folder_path, file_name)
 
     print("%-30s" % print_string + "All reports added to data base.")
-
-
-# __ db - statistical info, correct all types
-# __ check_report - file information, some types unchecked
-# __ add_report - file information, types unchecked, not uncodered lines
-# ?? check file type at upload
-# __ delete dump at final of scanning
-# check data to request with maximal size (200-500)
-# html report
-# test working, max time waiting between upload to request for correct work
-# __ add files to db script
-# __ open json with hebrew/russian symbols error
-# __ virustotal check and correct file info
-# __ constants
-# __ learning set
-# __ virustotal flag + virus name
-# __ two js scripts
-# whois for http, udp, tcp
-# __name file with code and file names with non-english language
-# __ correct code line length
-# __memory dump options
-
-# css, html - no clear id, classes and some code
-# function to check lot of files
-# instruction in html files

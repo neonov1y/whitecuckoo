@@ -1,19 +1,14 @@
+document.getElementById("memoryDump").checked = false;
+
 function menu(link) {
 	switch (link) {
 		case 1:
 			document.getElementById("art1").style.display = "block";
 			document.getElementById("art2").style.display = "none";
-			document.getElementById("art3").style.display = "none";
 			break;
 		case 2:
 			document.getElementById("art1").style.display = "none";
 			document.getElementById("art2").style.display = "block";
-			document.getElementById("art3").style.display = "none";
-			break;
-		case 3:
-			document.getElementById("art1").style.display = "none";
-			document.getElementById("art2").style.display = "none";
-			document.getElementById("art3").style.display = "block";
 			break;
 		default:
 			break;
@@ -29,6 +24,8 @@ function instruction(property) {
 			document.getElementById("instText").style.display = "block";
 			document.getElementById("instruction").style.display = "block";
 			document.getElementById("instruction").style.animation = "showInst 0.5s ease-in-out forwards";
+			document.getElementById("instruction").style.WebKitAnimation = "showInst 0.5s ease-in-out forwards";
+			document.getElementById("instruction").style.MozAnimation = "showInst 0.5s ease-in-out forwards";
 			break;
 		case "hide":
 			document.getElementById("instLinkHide").style.display = "none";
@@ -36,6 +33,8 @@ function instruction(property) {
 
 			document.getElementById("instText").style.display = "none";
 			document.getElementById("instruction").style.animation = "hideInst 0.5s ease-in-out forwards";
+			document.getElementById("instruction").style.WebKitAnimation = "hideInst 0.5s ease-in-out forwards";
+			document.getElementById("instruction").style.MozAnimation = "hideInst 0.5s ease-in-out forwards";
 			window.setTimeout(function() {document.getElementById("instruction").style.display = "none";},500);
 			break;
 		default:
@@ -66,9 +65,12 @@ function request_process(server_function) {
 		}
 	}
 
-	if (file.size/1024/1024 < 20 || server_function == "clear_list" || server_function == "learn_set" || server_function == "statistic_reset") {
+	if (file.size/1024/1024 < 40 || server_function == "clear_list" || server_function == "learn_set" || server_function == "statistic_reset") {
 		form.append("function_type", server_function);
-		if (server_function == "file_add") form.append("file", file);
+		if (server_function == "file_add") {
+			form.append("memory_dump", document.getElementById("memoryDump").checked);
+			form.append("file", file);
+		}
 		xhttp.open("POST", document.location.origin + "/upload_process", true);
 		xhttp.send(form);
 
@@ -77,7 +79,7 @@ function request_process(server_function) {
 	}
 	else {
 		document.getElementById("uploadBlock").innerHTML = "";
-		add_message_block("Message", "File to much big, maximal size is 10M. File size: " + (file.size/1024/1024).toFixed(2).toString() + "M");
+		add_message_block("Message", "File to much big, maximal size is 40M. Your file size: " + (file.size/1024/1024).toFixed(2).toString() + "M");
 	}
 }
 
@@ -88,6 +90,7 @@ function loading(switch_var) {
 			document.getElementById("uploadProperties").style.display = "none";
 			document.getElementById("loaderSpinner").style.display = "block";
 			document.getElementById("loaderText").style.display = "block";
+			document.getElementById("memoryDump").checked = false;
 			break;
 		case 0:
 			document.getElementById("uploadProperties").style.display = "block";

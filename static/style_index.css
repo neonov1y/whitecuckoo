@@ -2,83 +2,75 @@
 @import url('https://fonts.googleapis.com/css?family=Hind');
 
 @-webkit-keyframes blink {
-	100% { color: rgba(34, 34, 34, 0); }
+	100%	{ color: rgba(34, 34, 34, 0); }
+}
+
+@-moz-keyframes blink {
+	100%	{ color: rgba(34, 34, 34, 0); }
 }
 
 @keyframes blink {
-	100% { color: rgba(34, 34, 34, 0); }
+	100%	{ color: rgba(34, 34, 34, 0); }
 }
 
 @-webkit-keyframes spinner {
-	0% { -webkit-transform: rotate(0deg); }
-	100% { -webkit-transform: rotate(360deg); }
+	0%		{ -webkit-transform: rotate(0deg); }
+	100%	{ -webkit-transform: rotate(360deg); }
+}
+
+@-moz-keyframes spinner {
+	0%		{ -moz-transform: rotate(0deg); }
+	100%	{ -moz-transform: rotate(360deg); }
 }
 
 @keyframes spinner {
-	0% { transform: rotate(0deg); }
-	100% { transform: rotate(360deg); }
+	0%		{ transform: rotate(0deg); }
+	100%	{ transform: rotate(360deg); }
 }
 
-
-/*
-@keyframes show {
-    0% {
-        display: none;
-        position: fixed;
-        left: 3000px;
-    }
-    100% {
-        display: block;
-        left: 0px;
-        position: relative;
-    }
+@-webkit-keyframes show {
+    from	{ opacity: 0; }
+    to		{ opacity: 1; }
 }
-*/
+
+@-moz-keyframes show {
+    from	{ opacity: 0; }
+    to		{ opacity: 1; }
+}
 
 @keyframes show {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from	{ opacity: 0; }
+    to		{ opacity: 1; }
+}
+
+@-webkit-keyframes showInst {
+    from	{ height: 0px; }
+    to		{ height: 550px; }
+}
+
+@-moz-keyframes showInst {
+    from	{ height: 0px; }
+    to		{ height: 550px; }
 }
 
 @keyframes showInst {
-    from {
-    	height: 0px;
-        /* opacity: 0; */
-    }
-    to {
-    	height: 550px;
-        /* opacity: 1; */
-    }
+    from	{ height: 0px; }
+    to		{ height: 550px; }
+}
+
+@-webkit-keyframes hideInst {
+    from	{ height: 550px; }
+    to		{ height: 0px; }
+}
+
+@-moz-keyframes hideInst {
+    from	{ height: 550px; }
+    to		{ height: 0px; }
 }
 
 @keyframes hideInst {
-    from {
-    	height: 550px;
-        /* opacity: 1; */
-    }
-    to {
-    	height: 0px;
-        /* opacity: 0; */
-    }
-}
-
-@-moz-keyframes slide {
-	from {height: 0;}
-	to {height: 300px;}
-}
-
-@-webkit-keyframes slide {
-	from {height: 0;}
-	to {height: 300px;}
-}
-
-@keyframes slide {
-	from {height: 0;}
-	to {height: 300px;}
+    from	{ height: 550px; }
+    to		{ height: 0px; }
 }
 
 /* Main */
@@ -92,6 +84,10 @@ p {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 17px;
 	text-align: justify;
+}
+
+::-webkit-selection {
+	background-color: #D6CFA2;
 }
 
 ::-moz-selection {
@@ -120,16 +116,12 @@ h3 {
 	border-bottom-color: black;
 	border-bottom-style: solid;
 }
-/*
-mark {
-	color: black;
-	background-color: #F9966B;
-}
-*/
+
 .markSus {
 	color: unset;
 	background-color: unset;
 }
+
 /* Header */
 
 header {
@@ -205,13 +197,6 @@ nav {
     background-color: #C5BF9B;
     padding-top: 0px;
 	display: none;
-/*
-   -moz-animation: slide 1s forwards;
-   -webkit-animation: slide 1s forwards;
-   -o-animation: slide 1s forwards;
-   -ms-animation: slide 1s forwards;
-    animation: slide 1s forwards;
-    */
 }
 
 #instText {
@@ -220,7 +205,9 @@ nav {
     padding-left: 120px;
     padding-right: 120px;
     margin: 0px;
-    animation: show 0.5s ease-in-out;
+    -webkit-animation: show 0.5s ease-in-out;
+       -moz-animation: show 0.5s ease-in-out;
+    		animation: show 0.5s ease-in-out;
 }
 
 /* Section */
@@ -238,7 +225,9 @@ article {
 	padding: 20px;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	animation: show 0.4s ease-in-out;
+    -webkit-animation: show 0.4s ease-in-out;
+       -moz-animation: show 0.4s ease-in-out;
+    		animation: show 0.4s ease-in-out;
 }
 
 .center {
@@ -257,9 +246,11 @@ article {
 	font-size: 16px;
 	text-transform: uppercase;
 	text-decoration: none;
-	transition: 0.2s;
 	display: inline-block;
 	cursor: pointer;
+	-webkit-transition: 0.2s;
+	   -moz-transition: 0.2s;
+			transition: 0.2s;
 }
 
 #uploadContainer:hover {
@@ -280,21 +271,23 @@ article {
 	border-top-color: #444444;
 	width: 50px;
 	height: 50px;
-	-webkit-animation: spinner 1.5s linear infinite;
-	animation: spinner 1.5s linear infinite;
 	margin-bottom: 15px;
 	display: none;
+	-webkit-animation: spinner 1.5s linear infinite;
+	   -moz-animation: spinner 1.5s linear infinite;
+			animation: spinner 1.5s linear infinite;
 }
 
 #loaderText {
 	color: black;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 12px;
-	-webkit-animation: blink 1s ease-in-out alternate-reverse infinite;
-	animation: blink 1s ease-in-out alternate-reverse infinite;
 	text-align: center;
 	text-transform: uppercase;
 	display: none;
+	-webkit-animation: blink 1s ease-in-out alternate-reverse infinite;
+	   -moz-animation: blink 1s ease-in-out alternate-reverse infinite;
+			animation: blink 1s ease-in-out alternate-reverse infinite;
 }
 
 .resultButton {
@@ -308,20 +301,19 @@ article {
 	font-size: 12px;
 	text-transform: uppercase;
 	text-decoration: none;
-	transition: 0.2s;
 	cursor: pointer;
 	display: none;
 	border: 1px;
 	border-style: solid;
 	border-color: #333333;
+	-webkit-transition: 0.2s;
+	   -moz-transition: 0.2s;
+			transition: 0.2s;
 }
 
 .resultButton:hover {
 	color: #666666;
 	border-color: #666666;
-    padding-left: 20px;
-    padding-right: 20px;
-
 }
 
 .messageContainer {
@@ -383,53 +375,34 @@ article {
 	text-align: center;
 }
 
-input[type="text"].inputProperty {
-	display: inline;
-	width: 50px;
-	height: 15px;
-	color: #444444;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 12px;
-}
-
 input[type="checkbox"].switch {
-	font-size: 12px;
+	background-color: white;
+	width: 50px;
+	height: 14px;
+	border: 4px;
+	border-right: 37px;
+	border-style: solid;
+	border-color: #DDDDDD;
+	border-radius: 10px;
+	cursor: pointer;
+	outline: none;
 	-webkit-appearance: none;
 	   -moz-appearance: none;
 	        appearance: none;
-	width: 3.5em;
-	height: 1.5em;
-	background: #DDDDDD;
-	border-radius: 3em;
-	position: relative;
-	cursor: pointer;
-	outline: none;
-	-webkit-transition: all .2s ease-in-out;
-	transition: all .2s ease-in-out;
-  }
-  
+	-webkit-transition: border 0.5s ease-in-out;
+	   -moz-transition: border 0.5s ease-in-out;
+	        transition: border 0.5s ease-in-out;
+	-webkit-box-shadow: inset 0 0 1px rgba(0,0,0,.3);
+	   -moz-box-shadow: inset 0 0 1px rgba(0,0,0,.3);
+			box-shadow: inset 0 0 1px rgba(0,0,0,.3);
+}
+
 input[type="checkbox"].switch:checked {
-	background: #F75D59;
-}
-  
-input[type="checkbox"].switch:after {
-	position: absolute;
-	content: "";
-	width: 1.5em;
-	height: 1.5em;
-	border-radius: 50%;
-	background: #FFFFFF;
-	-webkit-box-shadow: 0 0 .25em rgba(0,0,0,.3);
-	        box-shadow: 0 0 .25em rgba(0,0,0,.3);
-	-webkit-transform: scale(.7);
-	        transform: scale(.7);
-	left: 0;
-	-webkit-transition: all .2s ease-in-out;
-	transition: all .2s ease-in-out;
-}
-  
-input[type="checkbox"].switch:checked:after {
-	left: calc(100% - 1.5em);
+	border: 4px;
+	border-left: 37px;
+	border-style: solid;
+	border-color: #F75D59;
+	border-radius: 10px;
 }
 
 /* Footer */

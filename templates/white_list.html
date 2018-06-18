@@ -14,15 +14,14 @@
 			</div>
 
 			<ul>
-				<!--<li><a class="menuLink" onclick="menu(1);">Instruction</a></li>-->
-				<li><a class="menuLink" onclick="menu(2);">Change White-list</a></li>
-				<li><a class="menuLink" onclick="menu(3);">Statistic</a></li>
+				<li><a class="menuLink" onclick="menu(1);">Change White-list</a></li>
+				<li><a class="menuLink" onclick="menu(2);">Statistic</a></li>
 			</ul>
 		</header>
 
         <nav>
             <p id="navText">
-                "We are use Cuckoo Sandbox 2.0.5 to scan files. More information you can find in instruction."
+                "Welcome to control page. More information you can find in instruction."
             </p><br /><br />
 
             <a class="instLink" id="instLinkShow" onclick="instruction('show');">Show Instruction</a>
@@ -31,25 +30,22 @@
 
 		<div id="instruction">
             <p id="instText">
-                Instruction.
+                <b>Maximal size</b><br />
+                Maximal available size of file which you can scan and add to white-list is 40MB.<br /><br />
+                <b>Memory dump</b><br />
+				Memory dump is optional function, its take a little more time, but in this case report include
+				runned processes.<br /><br />
+                <b>Standart set</b><br />
+                One of functions is standart set learning. In this case you will add a lot of ready reports (from some
+				folder on the server) to white-list. This reports is created on some snapshot, possible this snapshot
+				is old and you need more actual reports, in this case you can use script from server which scan lot of
+				files and save them reports.<br /><br />
             </p>
         </div>
 
 		<!--Section-->
 		<section>
 			<article id="art1">
-				<h3>Instruction</h3>
-
-				<p>
-					Supported neglected met she therefore unwilling discovery remainder. Way sentiments two
-                    indulgence uncommonly own. Diminution to frequently sentiments he connection continuing
-                    indulgence. An my exquisite conveying up defective. Shameless see the tolerably how
-                    continued. She enable men twenty elinor points appear. Whose merry ten yet was men seven
-                    ought balls.
-				</p>
-			</article>
-
-			<article id="art2">
 				<h3>White-list</h3>
 
                 <div align="center">
@@ -68,6 +64,12 @@
                         {% if cuckoo_status == True %}
                             <p class="center">Choise file to creat report and add to white-list: </p>
 
+							<div class="propertiesContainer">
+								<input type="checkbox" class="switch" id="memoryDump" />
+								<p class="propertiesText">Memory Dump</p>
+							</div>
+							<br />
+
                             <label class="uploadContainer">
                                 Upload & Add
                                 <input type="file" id="uploadFile" onchange="request_process('file_add')" formenctype="multipart/form-data" />
@@ -84,7 +86,7 @@
                 </div>
 			</article>
 
-			<article id="art3">
+			<article id="art2">
 				<h3>Statistic</h3>
 
 				<p>
@@ -107,7 +109,7 @@
 
 		<!--Footer-->
 		<footer>
-			<p id="footerText">Footer</p>
+			<p id="footerText"></p>
 		</footer>
 
 		<script type="text/javascript">

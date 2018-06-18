@@ -42,40 +42,4 @@ var chartConfig = {
     }
 }
 
-/*
-// Bar Chart
-var chartData = {
-    type: 'bar',
-    data: {
-        labels: ["Network", "Registry", "Files", "Processes"],
-        datasets: [{
-            label: 'Data in white-list',
-            data: [connections_number, registry_actions_number, file_actions_number, process_number],
-            backgroundColor: [
-                'rgba(230, 239, 194, 0.7)',
-                'rgba(240, 226, 194, 0.7)',
-                'rgba(208, 240, 194, 0.7)',
-                'rgba(240, 203, 194, 0.7)'
-            ],
-            borderColor: [
-                'rgba(230, 239, 194, 1)',
-                'rgba(240, 226, 194, 1)',
-                'rgba(208, 240, 194, 1)',
-                'rgba(240, 203, 194, 1)'
-            ],
-            borderWidth: 2
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
-    }
-}
-*/
-
 var chartObject = new Chart(canvas, chartConfig);

@@ -1,3 +1,6 @@
+document.getElementById("memoryDump").checked = false;
+var html_block = ""
+
 function instruction(property) {
 	switch (property) {
 		case "show":
@@ -7,6 +10,8 @@ function instruction(property) {
 			document.getElementById("instText").style.display = "block";
 			document.getElementById("instruction").style.display = "block";
 			document.getElementById("instruction").style.animation = "showInst 0.5s ease-in-out forwards";
+			document.getElementById("instruction").style.WebKitAnimation = "showInst 0.5s ease-in-out forwards";
+			document.getElementById("instruction").style.MozAnimation = "showInst 0.5s ease-in-out forwards";
 			break;
 		case "hide":
 			document.getElementById("instLinkHide").style.display = "none";
@@ -14,6 +19,8 @@ function instruction(property) {
 
 			document.getElementById("instText").style.display = "none";
 			document.getElementById("instruction").style.animation = "hideInst 0.5s ease-in-out forwards";
+			document.getElementById("instruction").style.WebKitAnimation = "hideInst 0.5s ease-in-out forwards";
+			document.getElementById("instruction").style.MozAnimation = "hideInst 0.5s ease-in-out forwards";
 			window.setTimeout(function() {document.getElementById("instruction").style.display = "none";},500);
 			break;
 		default:
@@ -26,12 +33,18 @@ function request_process() {
 
 	var xhttp = new XMLHttpRequest();
 	var form = new FormData();
+	var page_update_flag = 1;
 
 	xhttp.onreadystatechange = function () {
 		if (this.readyState == 4 && this.status == 200) {
 			var str_data = "";
 			var str_type = "";
 			object = JSON.parse(xhttp.responseText);
+
+			if (object.length > 500) {
+				add_message_block("Message", "Detected data is too much big you will see it in the HTML report only. To generate HTML report press 'GENERATE REPORT'.");
+				page_update_flag = 0;
+			}
 
 			for (var i = 0;i < object.length;i++) {
 				switch (object[i].data_type) {
@@ -107,29 +120,29 @@ function request_process() {
 				}
 
 				str_type = object[i].data_type;
-				add_message_block(str_type, str_data);
+				add_data_block(str_type, str_data);
 			}
 			// Loading off
+			if (page_update_flag == 1) {
+				document.getElementById("uploadBlock").innerHTML = html_block;
+			}
 			loading(0);
 		}
 	}
 
 	if (file.size/1024/1024 < 20) {
 		form.append("function_type", "file_check");
-		form.append("file", file);
 		form.append("memory_dump", document.getElementById("memoryDump").checked);
+		form.append("file", file);
 		xhttp.open("POST", document.location.origin + "/upload_process", true);
 		xhttp.send(form);
 
 		// Loading on
 		loading(1);
-
-		// Properties reset
-		document.getElementById("memoryDump").checked = false;
 	}
 	else {
 		document.getElementById("uploadBlock").innerHTML = "";
-		add_message_block("Message", "File to much big, maximal size is 10M. File size: " + (file.size/1024/1024).toFixed(2).toString() + "M");
+		add_message_block("Message", "File to much big, maximal size is 20M. Your file size: " + (file.size/1024/1024).toFixed(2).toString() + "M");
 	}
 }
 
@@ -141,6 +154,8 @@ function loading(switch_var) {
 			document.getElementById("loaderSpinner").style.display = "block";
 			document.getElementById("loaderText").style.display = "block";
 			document.getElementById("marker").innerHTML = "";
+			document.getElementById("memoryDump").checked = false;
+			html_block = "";
 			break;
 		case 0:
 			document.getElementById("uploadProperties").style.display = "block";
@@ -152,7 +167,7 @@ function loading(switch_var) {
 	}
 }
 
-function add_message_block(str_type, str_data) {
+function add_data_block(str_type, str_data) {
 	var str_color = "";
 	switch (str_type) {
 		case "Message":
@@ -210,6 +225,19 @@ function add_message_block(str_type, str_data) {
 			break;
 	}
 
+	html_block += "\
+		<div class='messageContainer' style='border-color: " + str_color + ";'>\
+			<div class='typeContainer'>\
+				<p class='messageType' style='color: " + str_color + "'>" + str_type + "</p>\
+			</div>\
+			<div class='dataContainer'>\
+				<p class='messageData' style='color: " + str_color + "'>" + str_data + "</p>\
+			</div>\
+		</div>";
+}
+
+function add_message_block(str_type, str_data) {
+	var str_color = "#FF4500";
 	document.getElementById("uploadBlock").innerHTML += "\
 		<div class='messageContainer' style='border-color: " + str_color + ";'>\
 			<div class='typeContainer'>\
@@ -289,7 +317,7 @@ function generate_report() {
 
     var pom = document.createElement('a');
     pom.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(initial_code) + 
-    	encodeURIComponent(document.getElementById("uploadBlock").innerHTML) + "</body></html>");
+    	encodeURIComponent(html_block) + "</body></html>");
     pom.setAttribute("download", "report.html");
 
     if (document.createEvent) {
@@ -303,7 +331,7 @@ function generate_report() {
 }
 
 function mark_word_list(str) {
-	var word_list = ["dns", "tcp", "http", "udp", "root", "crypt", "cryptography", "browser", "firefox", "chrome", "opera", "safari", "iexplore", "autorun", "password"];
+	var word_list = ["dns", "tcp", "http", "udp", "root", "crypt", "cryptography", "browser", "firefox", "chrome", "opera", "safari", "iexplore", "autorun", "password", "api"];
 	var temp1 = 0, temp2, temp3, temp4, temp5, temp6, stat1, result;
 	result = str
 
@@ -325,7 +353,6 @@ function mark_word_list(str) {
 	}
 	return result
 }
-	
 
 function mark_word_list_one(str, word) {
 	var temp1 = 0, temp2, stat1;
