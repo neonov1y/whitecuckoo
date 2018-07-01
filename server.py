@@ -2,6 +2,7 @@
 
 from flask import Flask, render_template, request
 from werkzeug import secure_filename
+import os
 import json
 import subprocess
 import time
@@ -94,6 +95,7 @@ def upload_process():
 
         # Wait to report
         time.sleep(15)
+        previous_report_size = 0
 
         while 1:
             result = subprocess.check_output(["ls", functions.PATH_ANALYSES])
@@ -105,10 +107,12 @@ def upload_process():
                     result = subprocess.check_output(["ls", functions.PATH_ANALYSES + report_id + "/reports/"])
                     report_flag = result.find("report.json")
                     if report_flag is not -1:
-                        break
+                        report_size = os.path.getsize(functions.PATH_ANALYSES + report_id + "/reports/report.json")
+                        if report_size == previous_report_size and report_size != 0:
+                            break
+                        else:
+                            previous_report_size = report_size
             time.sleep(1)
-
-        time.sleep(5)
 
         # Delete uploaded file from host and memory dump if exist
         subprocess.call(["rm", functions.PATH_UPLOADS + uploaded_file_name])
