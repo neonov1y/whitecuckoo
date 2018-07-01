@@ -45,31 +45,31 @@
 
 @-webkit-keyframes showInst {
     from	{ height: 0px; }
-    to		{ height: 550px; }
+    to		{ height: 600px; }
 }
 
 @-moz-keyframes showInst {
     from	{ height: 0px; }
-    to		{ height: 550px; }
+    to		{ height: 600px; }
 }
 
 @keyframes showInst {
     from	{ height: 0px; }
-    to		{ height: 550px; }
+    to		{ height: 600px; }
 }
 
 @-webkit-keyframes hideInst {
-    from	{ height: 550px; }
+    from	{ height: 600px; }
     to		{ height: 0px; }
 }
 
 @-moz-keyframes hideInst {
-    from	{ height: 550px; }
+    from	{ height: 600px; }
     to		{ height: 0px; }
 }
 
 @keyframes hideInst {
-    from	{ height: 550px; }
+    from	{ height: 600px; }
     to		{ height: 0px; }
 }
 

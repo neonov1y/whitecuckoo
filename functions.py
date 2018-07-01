@@ -22,6 +22,7 @@ PATH_STANDART_SET = "/home/alex/PycharmProjects/Cuckoo/white_list_set/"
 PATH_UPLOADS = "/home/alex/PycharmProjects/Cuckoo/uploads/"
 CONF_CUCKOO_VM = "Cuckoo"
 CONF_CUCKOO_SCAN_TIME = "12"
+PRINT_FLAG = False
 
 
 # Functions
@@ -242,7 +243,8 @@ def insert_data(db, cursor, data_type, data1, data2="", data3="", data4="", data
             cursor.execute(add_string, data)
             db.commit()
 
-            print("%-30s" % print_string + "%s" % "Data inserted.")
+            if PRINT_FLAG is True:
+                print("%-30s" % print_string + "%s" % "Data inserted.")
 
             return cursor.lastrowid
         else:
@@ -339,11 +341,13 @@ def check_data(cursor, data_type, data1, data2="", data3="", data4="", data5="")
             # print("%-30s" % print_string + "%s" % "Data selected." + str(type(item[0])))
 
             if data_id is None:
-                print("%-30s" % print_string + "%s" % "Data checked." + " Data no exist.")
+                if PRINT_FLAG is True:
+                    print("%-30s" % print_string + "%s" % "Data checked." + " Data no exist.")
                 return False
             else:
-                print("%-30s" % print_string + "%s" % "Data checked." + " ID: " + str(data_id[0]) + " (" +
-                      data_type + ")")
+                if PRINT_FLAG is True:
+                    print("%-30s" % print_string + "%s" % "Data checked." + " ID: " + str(data_id[0]) + " (" +
+                          data_type + ")")
                 return data_id[0]
         else:
             return False
@@ -361,7 +365,6 @@ def add_report(db, cursor, file_path, file_name):
 
     virus_flag = False
     print_string = "add_report: "
-    process_name = ""
 
     # Open JSON file
 
@@ -1168,10 +1171,11 @@ def check_report(cursor, file_path, file_name):
 
     # Print new data
 
-    for i in range(0, len(data)):
-        print(print_string + data[i]["data_type"] + ": " + str(data[i]))
+    if PRINT_FLAG is True:
+        for i in range(0, len(data)):
+            print(print_string + data[i]["data_type"] + ": " + str(data[i]))
 
-    print("%-30s" % print_string + "Total data: " + str(len(data)))
+    print("%-30s" % print_string + "Total detected data: " + str(len(data)))
 
     # Close JSON file
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Dashboard - White-list admin</title>
+		<title>Dashboard - Control page</title>
 		<meta charset="UTF-8" />
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_admin.css') }}" />
 	</head>
@@ -39,7 +39,7 @@
                 One of functions is standart set learning. In this case you will add a lot of ready reports (from some
 				folder on the server) to white-list. This reports is created on some snapshot, possible this snapshot
 				is old and you need more actual reports, in this case you can use script from server which scan lot of
-				files and save them reports.<br /><br />
+				files and save their reports.<br /><br />
             </p>
         </div>
 
@@ -62,7 +62,7 @@
                         </p>
 
                         {% if cuckoo_status == True %}
-                            <p class="center">Choise file to creat report and add to white-list: </p>
+                            <p class="center">Select file to create report and add to white-list: </p>
 
 							<div class="propertiesContainer">
 								<input type="checkbox" class="switch" id="memoryDump" />

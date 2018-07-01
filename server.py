@@ -25,7 +25,7 @@ def index():
     return render_template('index.html', cuckoo_status=cuckoo_status)
 
 
-@app.route('/admin_list')
+@app.route('/control_page')
 def admin_list():
     db, cursor = functions.mysql_create_connection()
 
@@ -66,6 +66,14 @@ def upload_process():
 
         # Save the uploaded file in the directory to uploads
         f = request.files["file"]
+
+        if f.filename == "file":
+            message = [{
+                "data_type":    "Message",
+                "message":      "File is incorrect."
+            }]
+            return json.dumps(message)
+
         uploaded_file_name = str(random.randint(1, 100000)) + "_" + secure_filename(f.filename)
         f.save(functions.PATH_UPLOADS + uploaded_file_name)
 
@@ -75,7 +83,7 @@ def upload_process():
             result = subprocess.check_output(["cuckoo", "submit", "--machine", functions.CONF_CUCKOO_VM, "--timeout",
                                               functions.CONF_CUCKOO_SCAN_TIME, "--memory", functions.PATH_UPLOADS +
                                               uploaded_file_name])
-        elif memory_dump_statment == "false":
+        else:
             result = subprocess.check_output(["cuckoo", "submit", "--machine", functions.CONF_CUCKOO_VM, "--timeout",
                                               functions.CONF_CUCKOO_SCAN_TIME, functions.PATH_UPLOADS +
                                               uploaded_file_name])
@@ -122,7 +130,6 @@ def upload_process():
                 "data_type":    "Message",
                 "message":      "File added successfully to white-list."
             }]
-            # copy report to special folder
 
         functions.mysql_close_connection(db, cursor)
 

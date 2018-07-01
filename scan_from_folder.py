@@ -1,27 +1,35 @@
 # Imports
 
-import sys
 from os import listdir
 import subprocess
 import time
 import functions
+from werkzeug import secure_filename
 
 # Variables
 
 FILES_FOLDER = "/home/alex/PycharmProjects/Cuckoo/scan_folder/"
 REPORTS_FOLDER = "/home/alex/PycharmProjects/Cuckoo/scan_reports/"
+FILES_NAME_ADDITION = "_doc_pdf_mix"
 MEMORY_DUMP = False
 
 
 def scan(path, memory_dump_statment=False):
-    files = listdir(path)
-
     # Check cuckoo status
     cuckoo_status = functions.cuckoo_status()
 
     if cuckoo_status is False:
         print("Cuckoo Sandbox is off, to scan files you must turn on Cuckoo.")
         return False
+
+    files = listdir(path)
+
+    for f in range(0, len(files)):
+        secure_file_name = secure_filename(files[f])
+        if files[f] != secure_file_name:
+            subprocess.check_output(["mv", path + files[f], path + secure_file_name])
+
+    files = listdir(path)
 
     for f in range(0, len(files)):
         # Check free space
@@ -67,7 +75,8 @@ def scan(path, memory_dump_statment=False):
         functions.add_report(db, cursor, file_path, "report.json")
         functions.mysql_close_connection(db, cursor)
 
-        subprocess.check_output(["cp", file_path + "report.json", REPORTS_FOLDER + str(f) + "_report.json"])
+        subprocess.check_output(["cp", file_path + "report.json", REPORTS_FOLDER + str(f) + "_report." +
+                                 FILES_NAME_ADDITION + "json"])
         subprocess.call(["rm", file_path + "report.json"])
 
 
