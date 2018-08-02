@@ -15,24 +15,26 @@ MYSQL_USER = "cuckoo"
 MYSQL_PASSWORD = "ac9100my"
 MYSQL_HOST = "localhost"
 MYSQL_DATABASE = "cuckoo"
-MYSQL_TABLES = ["connection_type", "file", "file_action", "file_dropped", "folder_action", "network_dns",
-                "network_http", "network_tcp", "network_udp", "process", "registry_action", "dll", "command_line"]
+MYSQL_TABLES = ("connection_type", "file", "file_action", "file_dropped", "folder_action", "network_dns",
+                "network_http", "network_tcp", "network_udp", "process", "registry_action", "dll", "command_line")
 PATH_ANALYSES = "/home/alex/.cuckoo/storage/analyses/"
 PATH_STANDART_SET = "/home/alex/PycharmProjects/Cuckoo/white_list_set/"
 PATH_UPLOADS = "/home/alex/PycharmProjects/Cuckoo/uploads/"
 CONF_CUCKOO_VM = "Cuckoo"
 CONF_CUCKOO_SCAN_TIME = "12"
 PRINT_FLAG = False
+CONNECTION_TABLE_FLAG = False
 
 
 # Functions
 # Function to open JSON file
 
 def json_open(file_path, file_name):
-    # file_path - input path to file
-    # file_name - input name of JSON file to open
-    # If file opened successfully function return object of opened file
-    # Else error exit
+    """ file_path - input path to file
+        file_name - input name of JSON file to open
+        If file opened successfully function return object of opened file
+        Else error exit
+    """
 
     print_string = "json_open: "
     global jfile
@@ -52,8 +54,9 @@ def json_open(file_path, file_name):
 # Function to close JSON file
 
 def json_close():
-    # If file closed successfully function return True
-    # Else error exit
+    """ If file closed successfully function return True
+        Else error exit
+    """
 
     print_string = "json_close: "
 
@@ -71,9 +74,10 @@ def json_close():
 # Function to create MySQL connection
 
 def mysql_create_connection():
-    # If database created well and cursor created successfully, function return cursor
-    # and turns database object and cursor be a global
-    # Else error exit
+    """ If database created well and cursor created successfully, function return cursor
+        and turns database object and cursor be a global
+        Else error exit
+    """
 
     mysql_parameters = {
         "user":     MYSQL_USER,
@@ -105,8 +109,9 @@ def mysql_create_connection():
 # Function to close MySQL connection
 
 def mysql_close_connection(db, cursor):
-    # If connection closed successfully, function return True
-    # Else error exit
+    """ If connection closed successfully, function return True
+        Else error exit
+    """
 
     print_string = "mysql_close_connection: "
 
@@ -125,7 +130,7 @@ def mysql_close_connection(db, cursor):
 # Function to exit in error case
 
 def error_exit(error_message):
-    # error_message - input message about error
+    """ error_message - input message about error """
 
     print_string = "error_exit: "
 
@@ -136,10 +141,11 @@ def error_exit(error_message):
 # Function to insert data to MySQL
 
 def insert_data(db, cursor, data_type, data1, data2="", data3="", data4="", data5=""):
-    # data_type - input variable which define type of data to insert
-    # data1, data2, data3, data4, data5 - input data
-    # If data inserted successfully, function return True
-    # Else return False and print message about insert miss
+    """ data_type - input variable which define type of data to insert
+        data1, data2, data3, data4, data5 - input data
+        If data inserted successfully, function return True
+        Else return False and print message about insert miss
+    """
 
     print_string = "insert_data: "
     data_ready_flag = False
@@ -257,11 +263,12 @@ def insert_data(db, cursor, data_type, data1, data2="", data3="", data4="", data
 # Function to check existence of data in MySQL
 
 def check_data(cursor, data_type, data1, data2="", data3="", data4="", data5=""):
-    # data_type - input variable which define type of data to check
-    # data1, data2, data3, data4, data5 - input data
-    # If data exist in database, function return id of data in database
-    # Else return False
-    # In case which data type is 'file', function return last id of existed data
+    """ data_type - input variable which define type of data to check
+        data1, data2, data3, data4, data5 - input data
+        If data exist in database, function return id of data in database
+        Else return False
+        In case which data type is 'file', function return last id of existed data
+    """
 
     print_string = "check_data: "
     data_ready_flag = False
@@ -359,9 +366,10 @@ def check_data(cursor, data_type, data1, data2="", data3="", data4="", data5="")
 # Function to add report to database
 
 def add_report(db, cursor, file_path, file_name):
-    # file_path - path to file
-    # file_name - name of file
-    # Before function call MySQL connection must be created
+    """ file_path - path to file
+        file_name - name of file
+        Before function call MySQL connection must be created
+    """
 
     virus_flag = False
     print_string = "add_report: "
@@ -386,10 +394,10 @@ def add_report(db, cursor, file_path, file_name):
 
     # Insert file information
 
-    if "target" in jdata and "info" in jdata:
-        if "package" in jdata["info"] and "file" in jdata["target"]:
+    if "target" in jdata:
+        if "file" in jdata["target"]:
             if "name" in jdata["target"]["file"] and "size" in jdata["target"]["file"] and "md5" in\
-                    jdata["target"]["file"]:
+                    jdata["target"]["file"] and "type" in jdata["target"]["file"]:
                 file_info = {
                     "name": str(jdata["target"]["file"]["name"].encode("utf-8")),
                     "type": str(jdata["target"]["file"]["type"].encode("utf-8")),
@@ -431,7 +439,8 @@ def add_report(db, cursor, file_path, file_name):
                 if data_id is False:
                     data_id = insert_data(db, cursor, "network_dns", dns_info["type"], dns_info["request"])
 
-                insert_data(db, cursor, "connection_type", "network_dns", file_id, data_id)
+                if CONNECTION_TABLE_FLAG is True:
+                    insert_data(db, cursor, "connection_type", "network_dns", file_id, data_id)
 
     # Insert HTTP connections
 
@@ -448,7 +457,8 @@ def add_report(db, cursor, file_path, file_name):
                 if data_id is False:
                     data_id = insert_data(db, cursor, "network_http", http_info["url"], http_info["host"])
 
-                insert_data(db, cursor, "connection_type", "network_http", file_id, data_id)
+                if CONNECTION_TABLE_FLAG is True:
+                    insert_data(db, cursor, "connection_type", "network_http", file_id, data_id)
 
     # Insert TCP connections
 
@@ -465,7 +475,8 @@ def add_report(db, cursor, file_path, file_name):
                 if data_id is False:
                     data_id = insert_data(db, cursor, "network_tcp", tcp_info["source"], tcp_info["destination"])
 
-                insert_data(db, cursor, "connection_type", "network_tcp", file_id, data_id)
+                if CONNECTION_TABLE_FLAG is True:
+                    insert_data(db, cursor, "connection_type", "network_tcp", file_id, data_id)
 
     # Insert UDP connections
 
@@ -482,7 +493,8 @@ def add_report(db, cursor, file_path, file_name):
                 if data_id is False:
                     data_id = insert_data(db, cursor, "network_udp", udp_info["source"], udp_info["destination"])
 
-                insert_data(db, cursor, "connection_type", "network_udp", file_id, data_id)
+                if CONNECTION_TABLE_FLAG is True:
+                    insert_data(db, cursor, "connection_type", "network_udp", file_id, data_id)
 
     # Creating of memory check variable
 
@@ -505,7 +517,8 @@ def add_report(db, cursor, file_path, file_name):
                     if data_id is False:
                         data_id = insert_data(db, cursor, "process", process_info["process_name"])
 
-                    insert_data(db, cursor, "connection_type", "process", file_id, data_id)
+                    if CONNECTION_TABLE_FLAG is True:
+                        insert_data(db, cursor, "connection_type", "process", file_id, data_id)
 
     # Insert dropped files
 
@@ -534,7 +547,8 @@ def add_report(db, cursor, file_path, file_name):
                     data_id = insert_data(db, cursor, "file_dropped", file_info["path"], file_info["type"],
                                           file_info["process"], file_info["size"])
 
-                insert_data(db, cursor, "connection_type", "file_dropped", file_id, data_id)
+                if CONNECTION_TABLE_FLAG is True:
+                    insert_data(db, cursor, "connection_type", "file_dropped", file_id, data_id)
 
     # Creating of behavior check variable
 
@@ -557,7 +571,8 @@ def add_report(db, cursor, file_path, file_name):
             if data_id is False:
                 data_id = insert_data(db, cursor, "dll", dll_info["full_path"])
 
-            insert_data(db, cursor, "connection_type", "dll", file_id, data_id)
+            if CONNECTION_TABLE_FLAG is True:
+                insert_data(db, cursor, "connection_type", "dll", file_id, data_id)
 
     # Insert command line
 
@@ -573,7 +588,8 @@ def add_report(db, cursor, file_path, file_name):
             if data_id is False:
                 data_id = insert_data(db, cursor, "command_line", command_info["command"])
 
-            insert_data(db, cursor, "connection_type", "command_line", file_id, data_id)
+            if CONNECTION_TABLE_FLAG is True:
+                insert_data(db, cursor, "connection_type", "command_line", file_id, data_id)
 
     # Insert opened files
 
@@ -589,7 +605,8 @@ def add_report(db, cursor, file_path, file_name):
             if data_id is False:
                 data_id = insert_data(db, cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
-            insert_data(db, cursor, "connection_type", "file_action", file_id, data_id)
+            if CONNECTION_TABLE_FLAG is True:
+                insert_data(db, cursor, "connection_type", "file_action", file_id, data_id)
 
     # Insert created files
 
@@ -605,7 +622,8 @@ def add_report(db, cursor, file_path, file_name):
             if data_id is False:
                 data_id = insert_data(db, cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
-            insert_data(db, cursor, "connection_type", "file_action", file_id, data_id)
+            if CONNECTION_TABLE_FLAG is True:
+                insert_data(db, cursor, "connection_type", "file_action", file_id, data_id)
 
     # Insert copied files
 
@@ -621,7 +639,8 @@ def add_report(db, cursor, file_path, file_name):
             if data_id is False:
                 data_id = insert_data(db, cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
-            insert_data(db, cursor, "connection_type", "file_action", file_id, data_id)
+            if CONNECTION_TABLE_FLAG is True:
+                insert_data(db, cursor, "connection_type", "file_action", file_id, data_id)
 
     # Insert written files
     
@@ -637,7 +656,8 @@ def add_report(db, cursor, file_path, file_name):
             if data_id is False:
                 data_id = insert_data(db, cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
-            insert_data(db, cursor, "connection_type", "file_action", file_id, data_id)
+            if CONNECTION_TABLE_FLAG is True:
+                insert_data(db, cursor, "connection_type", "file_action", file_id, data_id)
 
     # Insert deleted files
     # Detect all files except .tmp and .TMP
@@ -659,7 +679,8 @@ def add_report(db, cursor, file_path, file_name):
             if data_id is False:
                 data_id = insert_data(db, cursor, "file_action", file_info["action_type"], file_info["full_path"])
 
-            insert_data(db, cursor, "connection_type", "file_action", file_id, data_id)
+            if CONNECTION_TABLE_FLAG is True:
+                insert_data(db, cursor, "connection_type", "file_action", file_id, data_id)
 
     # Insert created folders
 
@@ -676,7 +697,8 @@ def add_report(db, cursor, file_path, file_name):
                 data_id = insert_data(db, cursor, "folder_action", directory_info["action_type"],
                                       directory_info["full_path"])
 
-            insert_data(db, cursor, "connection_type", "folder_action", file_id, data_id)
+            if CONNECTION_TABLE_FLAG is True:
+                insert_data(db, cursor, "connection_type", "folder_action", file_id, data_id)
 
     # Insert deleted folders
 
@@ -693,7 +715,8 @@ def add_report(db, cursor, file_path, file_name):
                 data_id = insert_data(db, cursor, "folder_action", directory_info["action_type"],
                                       directory_info["full_path"])
 
-            insert_data(db, cursor, "connection_type", "folder_action", file_id, data_id)
+            if CONNECTION_TABLE_FLAG is True:
+                insert_data(db, cursor, "connection_type", "folder_action", file_id, data_id)
 
     # Insert written registry
 
@@ -710,7 +733,8 @@ def add_report(db, cursor, file_path, file_name):
                 data_id = insert_data(db, cursor, "registry_action", regkey_info["action_type"],
                                       regkey_info["full_path"])
 
-            insert_data(db, cursor, "connection_type", "registry_action", file_id, data_id)
+            if CONNECTION_TABLE_FLAG is True:
+                insert_data(db, cursor, "connection_type", "registry_action", file_id, data_id)
 
     # Insert opened registry
 
@@ -727,7 +751,8 @@ def add_report(db, cursor, file_path, file_name):
                 data_id = insert_data(db, cursor, "registry_action", regkey_info["action_type"],
                                       regkey_info["full_path"])
 
-            insert_data(db, cursor, "connection_type", "registry_action", file_id, data_id)
+            if CONNECTION_TABLE_FLAG is True:
+                insert_data(db, cursor, "connection_type", "registry_action", file_id, data_id)
 
     # Insert deleted registry
 
@@ -744,7 +769,8 @@ def add_report(db, cursor, file_path, file_name):
                 data_id = insert_data(db, cursor, "registry_action", regkey_info["action_type"],
                                       regkey_info["full_path"])
 
-            insert_data(db, cursor, "connection_type", "registry_action", file_id, data_id)
+            if CONNECTION_TABLE_FLAG is True:
+                insert_data(db, cursor, "connection_type", "registry_action", file_id, data_id)
 
     # Insert readed registry
 
@@ -761,7 +787,8 @@ def add_report(db, cursor, file_path, file_name):
                 data_id = insert_data(db, cursor, "registry_action", regkey_info["action_type"],
                                       regkey_info["full_path"])
 
-            insert_data(db, cursor, "connection_type", "registry_action", file_id, data_id)
+            if CONNECTION_TABLE_FLAG is True:
+                insert_data(db, cursor, "connection_type", "registry_action", file_id, data_id)
 
     print("%-30s" % print_string + "%s" % "Report added.")
 
@@ -773,10 +800,11 @@ def add_report(db, cursor, file_path, file_name):
 # Function to process report
 
 def check_report(cursor, file_path, file_name):
-    # file_path - path to file
-    # file_name - name of file
-    # Before function call MySQL connection must be created
-    # Function return array with new data
+    """ file_path - path to file
+        file_name - name of file
+        Before function call MySQL connection must be created
+        Function return array with new data
+    """
 
     virus_flag = "Clean"
     print_string = "check_report: "
@@ -801,14 +829,14 @@ def check_report(cursor, file_path, file_name):
                 if check_jdata["scans"][scan]["detected"] is True:
                     virus_flag = "Malware"
                     if "result" in check_jdata["scans"][scan]:
-                        virus_array = virus_array + check_jdata["scans"][scan]["result"] + ", "
+                        virus_array = virus_array + str(check_jdata["scans"][scan]["result"]) + ", "
 
     # File information
 
-    if "target" in jdata and "info" in jdata:
-        if "package" in jdata["info"] and "file" in jdata["target"]:
+    if "target" in jdata:
+        if "file" in jdata["target"]:
             if "name" in jdata["target"]["file"] and "size" in jdata["target"]["file"] and "md5" in\
-                    jdata["target"]["file"]:
+                    jdata["target"]["file"] and "type" in jdata["target"]["file"]:
                 file_info = {
                     "data_type": "File info",
                     "name": str(jdata["target"]["file"]["name"].encode("utf-8")),
@@ -1189,11 +1217,11 @@ def check_report(cursor, file_path, file_name):
 # Function to clear database
 
 def clear_db(db, cursor):
-    # Function delete all data from database
+    """ Function delete all data from database """
 
     print_string = "clear_db: "
 
-    for i in range(0, 13):
+    for i in range(0, len(MYSQL_TABLES)):
         add_string = "DELETE FROM " + MYSQL_TABLES[i] + ""
         cursor.execute(add_string)
         db.commit()
@@ -1207,15 +1235,16 @@ def clear_db(db, cursor):
 # Function to count database length
 
 def length_db(cursor):
-    # Function return number of elements in database sorted by type of data
-    # data[0] - number of connection data
-    # data[1] - number of files in database
-    # data[2] - number of files actions in database
-    # data[3] - number of network connections in database
-    # data[4] - number of process in database
-    # data[5] - number of registry actions in database
-    # data[6] - number of DLL's in database
-    # data[7] - number of command of command line in database
+    """ Function return number of elements in database sorted by type of data
+        data[0] - number of connection data
+        data[1] - number of files in database
+        data[2] - number of files actions in database
+        data[3] - number of network connections in database
+        data[4] - number of process in database
+        data[5] - number of registry actions in database
+        data[6] - number of DLL's in database
+        data[7] - number of command of command line in database
+    """
 
     print_string = "length_db: "
     data = [0, 0, 0, 0, 0, 0, 0, 0]
@@ -1250,6 +1279,8 @@ def length_db(cursor):
 # Function to check cuckoo status
 
 def cuckoo_status():
+    """ Function return True if Cuckoo Sandbox available and else return False """
+
     print_string = "cuckoo_status: "
 
     result = subprocess.Popen(["pgrep", "-a", "cuckoo"], stdout=subprocess.PIPE)
@@ -1273,6 +1304,10 @@ def cuckoo_status():
 # Function to check disk space
 
 def disk_space():
+    """ Function return free disk space
+        free_space - free disk space
+    """
+
     print_string = "disk_space: "
 
     statvfs = os.statvfs("/home")
@@ -1286,6 +1321,8 @@ def disk_space():
 # Function to delete memory dump if exist (Tested with build-in strings)
 
 def delete_memory_dump(report_id):
+    """ Function to delete memory dump file """
+
     print_string = "delete_memory_dump: "
 
     result = subprocess.check_output(["ls", PATH_ANALYSES + str(report_id)])
@@ -1301,8 +1338,12 @@ def delete_memory_dump(report_id):
 # Function to change or return statistical data
 
 def statistic_data(db, cursor, function_type, scan_time=0):
-    # function_type == True - Add scanned file and change average scan time
-    # function_type == False - Return number of scans and average scan time
+    """ Function to change or return statistical data
+        function_type == True - Add scanned file and change average scan time
+        function_type == False - Return number of scans and average scan time
+        scans or item[0] - scan number
+        average_scan_time or item[1] - average scan time
+    """
 
     print_string = "statistic_data: "
 
@@ -1337,6 +1378,7 @@ def statistic_data(db, cursor, function_type, scan_time=0):
 # Function to reset statistical data
 
 def statistic_reset(db, cursor):
+    """ Function reset statistic data """
     print_string = "statistic_reset: "
 
     add_string = "UPDATE statistic SET scans = %s, average_scan_time = %s"
@@ -1351,6 +1393,8 @@ def statistic_reset(db, cursor):
 # Function to return database size
 
 def size_db(cursor):
+    """ Function return size of database in MB """
+
     print_string = "size_db: "
 
     query = "SELECT table_schema AS 'Database', SUM(data_length + index_length) \
@@ -1367,12 +1411,15 @@ def size_db(cursor):
 # Function to add set of reports to database
 
 def learn_set(db, cursor, folder_path):
+    """ Function add reports from folder to database
+        folder_path - folder with reports
+    """
+
     print_string = "learn_set: "
 
-    result = subprocess.check_output(["ls", folder_path]).split('\n')
-    result = result[0:len(result)-1]
+    files = os.listdir(folder_path)
 
-    for file_name in result:
+    for file_name in files:
         if file_name.find(".json") is not -1:
             add_report(db, cursor, folder_path, file_name)
 

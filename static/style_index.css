@@ -213,7 +213,6 @@ nav {
 /* Section */
 
 section {
-	min-height: 1000px;
 	padding: 25px;
 	margin-bottom: 20px;
 	margin-left: 40px;
@@ -409,7 +408,7 @@ input[type="checkbox"].switch:checked {
 
 footer {
 	height: 50px;
-	background-color: black;
+	background-color: white;
 	padding: 10px;
 }
 
